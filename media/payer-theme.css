@@ -1,0 +1,1142 @@
+
+
+html {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+:root {
+  --vp-font-family-base: "Source Serif 4", serif;
+  --vp-font-family-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  
+  --vp-c-bg: #fcf9f2;
+  --vp-c-bg-alt: #f1eee7;
+  --vp-c-bg-elv: #f1eee7; 
+  --vp-c-bg-soft: #f1eee7;
+
+  --vp-c-text-1: #03192e;
+  --vp-c-text-2: #1e2d37;
+  --vp-c-text-3: #241500;
+
+  --vp-c-brand-1: #03192e;
+  --vp-c-brand-2: #1e2d37;
+  --vp-c-brand-3: #241500; 
+  --vp-c-brand-soft: rgba(3, 25, 46, 0.05);
+
+  --vp-c-divider: #a1a1a1; 
+  --vp-c-border: #a1a1a1;
+  --vp-c-gutter: transparent;
+}
+
+
+
+
+
+.dark {
+  /* ── Scholarly Synthesis Dark · "Die illuminierte Handschrift bei Kerzenlicht" ── */
+  /* Hintergründe: Deep Ink ── */
+  --vp-c-bg: #0a1628;
+  --vp-c-bg-alt: #0f1e35;
+  --vp-c-bg-elv: #0f1e35;
+  --vp-c-bg-soft: #0f1e35;
+
+  /* Text: warme Pergament-Töne ── */
+  --vp-c-text-1: #e8e0d3;
+  --vp-c-text-2: #c4bba5;
+  --vp-c-text-3: #a09080;
+
+  /* Brand: Gold/Amber (abgeleitet vom grammar-box-Rand) ── */
+  --vp-c-brand-1: #eab308;
+  --vp-c-brand-2: #ca8a04;
+  --vp-c-brand-3: #d97706;
+  --vp-c-brand-soft: rgba(234, 179, 8, 0.12);
+
+  /* Code-Blöcke ── */
+  --vp-c-default-1: #334155;
+  --vp-c-default-2: #475569;
+  --vp-c-default-3: #64748b;
+  --vp-c-default-soft: rgba(51, 65, 85, 0.35);
+
+  --vp-c-divider: #334155;
+  --vp-c-border: #334155;
+  --vp-c-gutter: #0a1628;
+}
+
+
+/* Typografie */
+:where(.vp-doc, body) h1, :where(.vp-doc, body) h2, :where(.vp-doc, body) h3, :where(.vp-doc, body) h4, :where(.vp-doc, body) h5, :where(.vp-doc, body) h6, .VPHero .name, .VPHero .text, blockquote {
+  font-family: "Source Serif 4", serif !important;
+  font-style: normal !important;
+}
+
+:where(.vp-doc, body) h1 {
+  border-top: 1px solid var(--vp-c-divider) !important;
+  padding-top: 1.5rem;
+  margin-top: 2rem !important;
+}
+
+:where(.vp-doc, body) h2 {
+  font-weight: 500;
+  font-style: normal !important;
+  margin-top: 3.5rem !important;
+  border-top: 1px solid var(--vp-c-divider) !important;
+  padding-top: 1.5rem;
+}
+
+:where(.vp-doc, body) h3 {
+  font-weight: 500;
+  font-style: normal !important;
+  margin-top: 2.5rem !important;
+  border-top: 1px solid var(--vp-c-divider) !important;
+  padding-top: 1rem;
+}
+
+:where(.vp-doc, body) h4 {
+  font-weight: 600;
+  font-style: normal !important;
+  margin-top: 2rem !important;
+  border-top: 1px solid var(--vp-c-divider) !important;
+  padding-top: 0.75rem;
+  font-size: 1.1rem;
+}
+
+.VPNavBar, .VPSidebar, .VPNav, .VPDocFooter, .outline-link, .outline-title, .badge, .VPLink, .VPButton {
+  font-family: "Inter", sans-serif !important;
+}
+
+:where(.vp-doc, body) p, :where(.vp-doc, body) li, :where(.vp-doc, body) table {
+  font-size: 1.1rem;
+  line-height: 1.55;
+}
+
+/* Lists Refinement */
+:where(.vp-doc, body) ul li, :where(.vp-doc, body) ol li {
+  margin-top: 0.35rem !important;
+  line-height: 1.5 !important;
+}
+
+:where(.vp-doc, body) ul ul li, :where(.vp-doc, body) ol ol li, :where(.vp-doc, body) ul ol li, :where(.vp-doc, body) ol ul li {
+  list-style-type: circle !important;
+  line-height: 1.4 !important;
+  margin-top: 0.1rem !important;
+}
+
+/* Tabellen */
+:where(.vp-doc, body) table {
+  display: table;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  width: auto !important;
+  max-width: 100%;
+  border: 1px solid #94a3b8 !important;
+  border-radius: 8px; 
+}
+
+
+
+
+
+
+:where(.vp-doc, body) th {
+  background-color: transparent !important;
+  color: var(--vp-c-text-1);
+  font-weight: 600;
+  text-align: left;
+  border-bottom: 1px solid var(--vp-c-divider) !important;
+}
+
+/* Spezialregel für Tabellen ohne Kopfzeile (explizit via ::: no-header) */
+:where(.vp-doc, body) .no-header table thead {
+  display: none !important;
+}
+
+:where(.vp-doc, body) .no-header table {
+  border-top: 1px solid #94a3b8 !important;
+  margin-top: 0 !important;
+}
+
+:where(.vp-doc, body) td, :where(.vp-doc, body) th {
+  padding: 0.6rem 0.8rem;
+  border: 1px solid #94a3b8 !important;
+}
+
+/* Phonetic Tables (Lektion 1, etc.) */
+:where(.vp-doc, body) .custom-block.laut-table table td:first-child {
+  white-space: nowrap;
+  min-width: 9rem;
+  font-weight: 600;
+}
+
+
+
+
+:where(.vp-doc, body) tr:nth-child(even) {
+  background-color: var(--vp-c-bg-soft);
+}
+
+
+
+
+
+/* Blockquotes & Grammatik-Boxen */
+:where(.vp-doc, body) blockquote {
+  margin: 1rem 0;
+  padding: 0.5rem 1rem;
+  transition: all 0.3s ease;
+}
+
+:where(.vp-doc, body) > blockquote,
+:where(.vp-doc, body) > div > blockquote {
+  border-left: 4px solid var(--vp-c-brand-1);
+  background-color: var(--vp-c-bg-soft);
+  border-radius: 0 4px 4px 0;
+}
+
+:where(.vp-doc, body) blockquote blockquote {
+  border-left: none;
+  padding-left: 1.5rem;
+  margin: 0.2rem 0;
+  background-color: transparent;
+}
+
+:where(.vp-doc, body) blockquote p {
+  margin: 0.2rem 0 !important;
+  line-height: 1.45 !important;
+}
+
+/* Devanagari Scholarly Styling */
+.sanskrit-dev {
+  color: #b22222; /* Scholastic Red */
+  font-family: "Sanskrit2003", "ITR Vijay", serif;
+  font-size: 1.15em;
+  font-weight: 600;
+  margin: 0;
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+/* RTL Isolation for code blocks */
+html[dir="rtl"] code {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+/* Auto-detect directionality for mixed content in RTL documents */
+html[dir="rtl"] :where(.vp-doc, body) p,
+html[dir="rtl"] :where(.vp-doc, body) li,
+html[dir="rtl"] :where(.vp-doc, body) div,
+html[dir="rtl"] :where(.vp-doc, body) strong,
+html[dir="rtl"] :where(.vp-doc, body) em {
+  unicode-bidi: plaintext;
+}
+
+
+/* Hindi Devanagari — same font as Sanskrit but no color override */
+.hindi-dev {
+  font-family: "Sanskrit2003", "ITR Vijay", serif;
+  font-size: 1.15em;
+  font-weight: 600;
+  margin: 0;
+}
+:where(.vp-doc, body) table .hindi-dev {
+  font-size: 1.35em !important;
+}
+
+/* Table-specific overrides for Sanskrit (Default to Scholastic Red unless specified) */
+:where(.vp-doc, body) table strong em .sanskrit-dev,
+:where(.vp-doc, body) table em strong .sanskrit-dev,
+:where(.vp-doc, body) table mark .sanskrit-dev {
+  color: #b22222 !important; /* Scholarly red (Hellrot) */
+}
+
+/* Make Devanagari inside tables larger for better legibility */
+:where(.vp-doc, body) table .sanskrit-dev {
+  font-size: 1.35em !important;
+}
+
+/* Devanagari in grammar-box tables: same red as everywhere else */
+
+
+/* Custom Blocks (Grammar, Media, Note, etc.) */
+.custom-block.grammar-box,
+:where(.vp-doc, body) .custom-block.grammar-box {
+  background-color: #fefce8 !important; /* Light yellow parity with original */
+  border: none !important;
+  border-left: 5px solid #eab308 !important; /* Golden Yellow */
+  margin: 1.5rem 0;
+  padding: 1.25rem;
+  border-radius: 0 8px 8px 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  font-size: 1.1rem !important; /* Standardize font size for the whole box */
+  color: #1e293b !important;
+}
+
+.dark .custom-block.grammar-box,
+.dark :where(.vp-doc, body) .custom-block.grammar-box,
+.vscode-dark .custom-block.grammar-box {
+  background-color: #241500 !important;
+  border-left-color: #eab308 !important;
+  color: #fef08a !important;
+}
+
+/* Custom Block: Grammar-Box 2 (Orange background, bold styling) */
+.custom-block.grammar-box2,
+:where(.vp-doc, body) .custom-block.grammar-box2 {
+  background-color: #ffedd5 !important; /* Light orange / warm peach */
+  border: none !important;
+  border-left: 5px solid #ea580c !important; /* Deep Orange */
+  margin: 1.5rem 0;
+  padding: 1.25rem;
+  border-radius: 0 8px 8px 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  font-size: 1.1rem !important;
+  color: #431407 !important;
+  font-weight: 600 !important;
+}
+
+.dark .custom-block.grammar-box2,
+.dark :where(.vp-doc, body) .custom-block.grammar-box2,
+.vscode-dark .custom-block.grammar-box2 {
+  background-color: #361e04 !important;
+  border-left-color: #ea580c !important;
+  color: #ffedd5 !important;
+}
+
+.custom-block.grammar-box2 .custom-block-title,
+:where(.vp-doc, body) .custom-block.grammar-box2 .custom-block-title {
+  display: none;
+}
+
+.grammar-box2 blockquote,
+:where(.vp-doc, body) .grammar-box2 blockquote {
+  border-left: none !important;
+  background-color: transparent !important;
+  padding-left: 2rem !important;
+  margin: 0.5rem 0 !important;
+  font-size: 1em !important;
+  color: inherit !important;
+}
+
+.grammar-box2 blockquote p,
+:where(.vp-doc, body) .grammar-box2 blockquote p {
+  font-weight: inherit !important;
+  font-size: 1em !important;
+  line-height: inherit !important;
+  color: inherit !important;
+}
+
+/* Note Box (Minimalist scholarly asides - discrete slate gray) */
+.custom-block.note-box,
+.custom-block.tip,
+:where(.vp-doc, body) .custom-block.note-box,
+:where(.vp-doc, body) .custom-block.tip {
+  background-color: #f8fafc !important; /* Discrete slate tint */
+  border: none !important;
+  border-left: 4px solid #64748b !important; /* Slate Grey border */
+  margin: 1.5rem 0;
+  padding: 0.85rem 1.25rem;
+  border-radius: 0 6px 6px 0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  font-size: 1.05rem !important;
+  color: #334155 !important;
+}
+
+.dark .custom-block.note-box,
+.dark .custom-block.tip,
+.dark :where(.vp-doc, body) .custom-block.note-box,
+.dark :where(.vp-doc, body) .custom-block.tip,
+.vscode-dark .custom-block.note-box,
+.vscode-dark .custom-block.tip {
+  background-color: #1e293b !important;
+  border-left-color: #94a3b8 !important;
+  color: #f1f5f9 !important;
+}
+
+.custom-block.note-box .custom-block-title,
+.custom-block.tip .custom-block-title,
+:where(.vp-doc, body) .custom-block.note-box .custom-block-title,
+:where(.vp-doc, body) .custom-block.tip .custom-block-title,
+.custom-block.grammar-box .custom-block-title,
+:where(.vp-doc, body) .custom-block.grammar-box .custom-block-title {
+  display: none !important;
+}
+
+/* Suppress nested blockquote borders/backgrounds in grammar boxes for original parity */
+:where(.vp-doc, body) .grammar-box blockquote {
+  border-left: none !important;
+  background-color: transparent !important;
+  padding-left: 2rem !important;
+  margin: 0.5rem 0 !important;
+  font-size: 1em !important; /* Relative to the 1.1rem parent */
+  color: inherit !important;
+}
+
+:where(.vp-doc, body) .grammar-box blockquote p {
+  font-weight: 500;
+  font-size: 1em !important;
+  line-height: inherit !important;
+  color: inherit !important;
+}
+
+/* Remove bottom margin from the last child inside any custom-block to avoid
+   extra whitespace (child margin + container padding stacking). */
+:where(.vp-doc, body) .custom-block > *:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* Table-wrapper containers (center, no-header) nested directly inside a
+   grammar-box must not add their own margin/padding — the grammar-box
+   padding (1.25rem) already provides all the breathing room. */
+:where(.vp-doc, body) .grammar-box > .custom-block.center,
+:where(.vp-doc, body) .grammar-box > .custom-block.no-header {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* indent blocks nested directly inside a grammar-box: suppress the
+   negative margin-top (-0.7rem) that is designed for post-paragraph
+   context — here the grammar-box padding already handles spacing. */
+:where(.vp-doc, body) .grammar-box > .custom-block.indent {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+/* Empty paragraphs created by blank lines around block-level children
+   inside a grammar-box contribute height without content — hide them. */
+:where(.vp-doc, body) .grammar-box > p:empty {
+  display: none;
+  margin: 0 !important;
+}
+
+/* Media & Image Alignment */
+:where(.vp-doc, body) .custom-block.media,
+:where(.vp-doc, body) .media {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 2.5rem 0 !important;
+  width: 100% !important;
+}
+
+:where(.vp-doc, body) img,
+:where(.vp-doc, body) .media img {
+  display: block !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  margin-bottom: 0 !important; /* Force zero margin to close gap to caption */
+  max-width: 100% !important;
+  height: auto !important;
+  border-radius: 4px;
+}
+
+:where(.vp-doc, body) .custom-block.media p,
+:where(.vp-doc, body) .media p {
+  text-align: center !important;
+  width: 100% !important;
+  margin-top: 0 !important; /* Zero margin for absolute proximity */
+  margin-bottom: 0 !important; /* Added: Zero margin to collapse gap between image-p and caption-p */
+  line-height: 1.3 !important;
+  font-size: 0.95rem !important;
+  color: var(--vp-c-text-2) !important;
+  font-style: normal !important;
+}
+
+/* Center Container (for Prayers, etc.) */
+:where(.vp-doc, body) .center,
+:where(.vp-doc, body) .custom-block.center {
+  width: 100% !important;
+  text-align: center !important;
+  margin: 2.5rem 0 !important;
+  display: block !important;
+}
+
+:where(.vp-doc, body) .center p,
+:where(.vp-doc, body) .custom-block.center p {
+  text-align: center !important;
+  white-space: pre-line !important;
+  display: block !important;
+  width: 100% !important;
+  margin: 0 auto 1.5rem auto !important;
+}
+
+:where(.vp-doc, body) .custom-block.center .custom-block-title {
+  display: none;
+}
+
+/* OM Signet: signalrot strong em inside center container renders larger */
+:where(.vp-doc, body) .custom-block.center p strong em,
+:where(.vp-doc, body) .custom-block.center p em strong {
+  font-size: 4rem !important;
+  line-height: 1.2 !important;
+  display: block !important;
+}
+
+/* Important Box (Violet with Traffic Sign) */
+.custom-block.important,
+:where(.vp-doc, body) .custom-block.important {
+  background-color: #f5f3ff !important; /* Light violet */
+  border: none !important;
+  border-left: 5px solid #8b5cf6 !important; /* Violet */
+  margin: 1.5rem 0;
+  padding: 1.25rem 1.25rem 1.25rem 4.5rem !important;
+  border-radius: 0 8px 8px 0;
+  position: relative;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.dark .custom-block.important,
+.dark :where(.vp-doc, body) .custom-block.important,
+.vscode-dark .custom-block.important {
+  background-color: #2e1065 !important; /* Deep dark violet */
+  border-left-color: #a78bfa !important;
+  color: #f5f3ff !important;
+}
+
+.custom-block.important::before,
+:where(.vp-doc, body) .custom-block.important::before {
+  content: "" !important;
+  position: absolute !important;
+  left: 1rem !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  width: 2.8rem !important;
+  height: 2.8rem !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpolygon points='50,5 95,90 5,90' fill='%23ee2c30' stroke='%23ee2c30' stroke-width='4' stroke-linejoin='round'/%3E%3Cpolygon points='50,18 85,83 15,83' fill='%23ffffff'/%3E%3Cpath d='M50,32 L50,60' stroke='%23231f20' stroke-width='8' stroke-linecap='round'/%3E%3Ccircle cx='50' cy='72' r='5' fill='%23231f20'/%3E%3C/svg%3E") !important;
+  background-size: contain !important;
+  background-repeat: no-repeat !important;
+}
+
+.dark .custom-block.important::before,
+.dark :where(.vp-doc, body) .custom-block.important::before,
+.vscode-dark .custom-block.important::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpolygon points='50,5 95,90 5,90' fill='%23ee2c30' stroke='%23ee2c30' stroke-width='4' stroke-linejoin='round'/%3E%3Cpolygon points='50,18 85,83 15,83' fill='%23ffffff'/%3E%3Cpath d='M50,32 L50,60' stroke='%23231f20' stroke-width='8' stroke-linecap='round'/%3E%3Ccircle cx='50' cy='72' r='5' fill='%23231f20'/%3E%3C/svg%3E") !important;
+  background-color: transparent !important;
+}
+
+:where(.vp-doc, body) .custom-block.important .custom-block-title {
+  display: none;
+}
+
+/* Verstecke INFO-Block auf Einzelseiten */
+:where(.vp-doc, body) .custom-block.info {
+  display: none;
+}
+
+.VPDoc {
+  padding-top: 0 !important;
+}
+
+
+/* Native VitePress Prev/Next ausgeblendet – ersetzt durch PayerDocFooter */
+.VPDocFooter .prev-next {
+  display: none;
+}
+
+/* Hellrot-Hervorhebung (Explizit via ***word*** oder <strong><em>) */
+:where(.vp-doc, body) strong em,
+:where(.vp-doc, body) em strong {
+  font-style: normal !important;
+  font-weight: 800 !important;
+}
+
+.dark :where(.vp-doc, body) strong em,
+.dark :where(.vp-doc, body) em strong {
+  /* color removed to prevent red Latin letters */
+}
+
+/* Robust SignalRot handling: targets .sanskrit-dev whether it's a child SPAN or applied directly to the EM */
+:where(.vp-doc, body) strong em .sanskrit-dev,
+:where(.vp-doc, body) em strong .sanskrit-dev,
+:where(.vp-doc, body) strong em.sanskrit-dev,
+:where(.vp-doc, body) em strong.sanskrit-dev {
+  color: #b22222 !important;
+  font-style: normal !important;
+}
+
+.dark :where(.vp-doc, body) strong em .sanskrit-dev,
+.dark :where(.vp-doc, body) em strong .sanskrit-dev,
+.dark :where(.vp-doc, body) strong em.sanskrit-dev,
+.dark :where(.vp-doc, body) em strong.sanskrit-dev {
+  color: #8b1a1a !important;
+  font-style: normal !important;
+}
+.dark :where(.vp-doc, body) strong em .sanskrit-dev,
+.dark :where(.vp-doc, body) em strong .sanskrit-dev,
+.dark :where(.vp-doc, body) strong em.sanskrit-dev,
+.dark :where(.vp-doc, body) em strong.sanskrit-dev {
+  color: #8b1a1a !important;
+  font-style: normal !important;
+}
+
+
+
+/* Hindi-Devanagari (Spalte 4) explizit schwarz */
+:where(.vp-doc, body) table td:nth-child(4) {
+  color: #000 !important;
+  font-style: normal !important;
+}
+
+.dark :where(.vp-doc, body) table td:nth-child(4) {
+  color: #fff !important;
+  font-style: normal !important;
+}
+
+/* SignalRot auch in Tabellen-Zellen erzwingen (fallback für strong+em) */
+:where(.vp-doc, body) table strong em {
+  font-style: normal !important;
+}
+
+.dark :where(.vp-doc, body) table strong em {
+  font-style: normal !important;
+}
+
+:where(.vp-doc, body) .grammar-box strong em .sanskrit-dev,
+:where(.vp-doc, body) .grammar-box em strong .sanskrit-dev {
+  color: #b22222 !important;
+}
+
+.dark :where(.vp-doc, body) .grammar-box strong .sanskrit-dev {
+  color: #8b1a1a !important;
+}
+
+.dark :where(.vp-doc, body) .grammar-box strong em .sanskrit-dev,
+.dark :where(.vp-doc, body) .grammar-box em strong .sanskrit-dev {
+  color: #8b1a1a !important;
+}
+
+/* Verstecke deleteme-box (Inhalt nur für Redaktion/QA relevant) */
+:where(.vp-doc, body) .custom-block.deleteme-box {
+  display: none !important;
+}
+
+/* Metrische Schemata (L16-Ref) */
+:where(.vp-doc, body) .metrik-schema {
+  font-family: var(--vp-font-family-mono) !important;
+  font-size: 1.8rem !important;
+  font-weight: 800 !important;
+  line-height: 1.8 !important;
+  margin: 1.5rem 0 !important;
+  text-align: left;
+  padding-left: 3rem;
+  white-space: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+:where(.vp-doc, body) .metrik-schema p {
+  font-size: inherit !important;
+  line-height: inherit !important;
+}
+
+:where(.vp-doc, body) .metrik-schema strong {
+  color: var(--vp-c-brand-1);
+}
+
+:where(.vp-doc, body) .metrik-schema strong em,
+:where(.vp-doc, body) .metrik-schema em strong {
+  color: #b22222 !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  font-size: inherit !important;
+  font-family: var(--vp-font-family-mono) !important;
+}
+
+.dark :where(.vp-doc, body) .metrik-schema strong em,
+.dark :where(.vp-doc, body) .metrik-schema em strong {
+  color: #8b1a1a !important;
+}
+
+/* Split Viewer / Embedded Mode Fixes */
+html.is-embedded .VPNav,
+html.is-embedded .VPSidebar,
+html.is-embedded .VPLocalNav,
+html.is-embedded .VPDocFooter,
+html.is-embedded .VPFooter {
+  display: none !important;
+}
+
+html.is-embedded .VPDoc {
+  padding: 0 !important;
+}
+
+/* Wide Mode & Embedded Mode Layout Overrides */
+html.is-wide,
+html.is-embedded {
+  --vp-layout-max-width: 100% !important;
+  --vp-content-width: 100% !important;
+  --vp-content-max-width: 100% !important;
+}
+
+html.is-wide .VPDoc .container,
+html.is-embedded .VPDoc .container {
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 4rem !important;
+}
+
+html.is-wide .VPDoc .content,
+html.is-embedded .VPDoc .content,
+html.is-wide .VPDoc .content-container,
+html.is-wide .VPDoc .main {
+  max-width: none !important;
+  width: 100% !important;
+}
+
+html.is-wide .VPDoc .vp-doc,
+html.is-wide .VPDoc .content-container {
+  max-width: none !important;
+}
+
+/* Korrektur für zentrierten Rand im Split Viewer */
+html.is-embedded .VPContent {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* License Audit Highlighting */
+.license-page tr:target {
+  background-color: #fefce8 !important; /* Light yellow highlight */
+  outline: 2px solid #eab308;
+  transition: background-color 0.5s ease;
+}
+
+.dark .license-page tr:target {
+  background-color: #422006 !important; /* Dark brown highlight */
+  outline: 2px solid #eab308;
+}
+
+/* Indentation Tools */
+:where(.vp-doc, body) .custom-block.indent {
+  padding-left: 2.5rem !important;
+  margin: 0 !important;
+  margin-top: -0.7rem !important; /* Pull up to match line-height */
+}
+
+:where(.vp-doc, body) .custom-block.indent p {
+  margin: 0.25rem 0 !important;
+  line-height: 1.45 !important;
+}
+
+.indent-inline {
+  display: inline-block;
+  width: 2rem;
+}
+
+/* Compact line height custom block */
+:where(.vp-doc, body) .custom-block.compact {
+  line-height: 1.15 !important;
+  margin: 1rem 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  background-color: transparent !important;
+}
+
+:where(.vp-doc, body) .custom-block.compact p {
+  line-height: 1.15 !important;
+  margin: 0 !important;
+}
+
+/* Tamil — Noto Sans Tamil font */
+html[lang="ta-IN"] {
+  --vp-font-family-base: "Noto Sans Tamil", "Latha", "Tamil Sangam MN", sans-serif;
+}
+
+/* Body text: leicht reduziert (war 1.15em — zu gross) */
+html[lang="ta-IN"] :where(.vp-doc, body) p,
+html[lang="ta-IN"] :where(.vp-doc, body) li,
+html[lang="ta-IN"] :where(.vp-doc, body) td,
+html[lang="ta-IN"] :where(.vp-doc, body) th {
+  font-size: 1.05em;
+}
+
+html[lang="ta-IN"] :where(.vp-doc, body) h1 { font-size: 2rem; }
+html[lang="ta-IN"] :where(.vp-doc, body) h2 { font-size: 1.6rem; }
+html[lang="ta-IN"] :where(.vp-doc, body) h3 { font-size: 1.3rem; }
+
+/* Navigation + Sidebar: Noto Sans Tamil, etwas grösser */
+html[lang="ta-IN"] .VPNavBar,
+html[lang="ta-IN"] .VPSidebar,
+html[lang="ta-IN"] .VPNav,
+html[lang="ta-IN"] .outline-link,
+html[lang="ta-IN"] .outline-title,
+html[lang="ta-IN"] .VPLink,
+html[lang="ta-IN"] .VPDocFooter {
+  font-family: "Noto Sans Tamil", "Latha", "Tamil Sangam MN", sans-serif !important;
+  font-size: 1.05rem !important;
+}
+
+/* PWA Install Button */
+.pwa-install-btn {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  z-index: 9999;
+  padding: 12px 24px;
+  background: #03192e;
+  color: #fcf9f2;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(3, 25, 46, 0.3);
+  animation: pwa-fadeIn 200ms ease-out;
+  transition: opacity 200ms, background 200ms;
+}
+
+.pwa-install-btn:hover {
+  background: #0a2a44;
+  opacity: 0.95;
+}
+
+@keyframes pwa-fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Dark Mode */
+.dark .pwa-install-btn {
+  background: #1a3a55;
+  color: #fcf9f2;
+}
+
+.dark .pwa-install-btn:hover {
+  background: #244a6a;
+}
+
+/* === PWA Progress Overlay (Plan 20-5) ===
+ * Shown during install: pre-caches active locales via service worker.
+ */
+.pwa-progress-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(3, 25, 46, 0.85);
+  backdrop-filter: blur(4px);
+  animation: pwa-fadeIn 200ms ease-out;
+}
+
+.pwa-progress-container {
+  width: 90%;
+  max-width: 440px;
+  padding: 24px 28px;
+  background: var(--vp-c-bg, #fcf9f2);
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  color: var(--vp-c-text-1, #03192e);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.pwa-progress-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.pwa-progress-subtitle {
+  font-size: 0.8rem;
+  font-weight: 500;
+  opacity: 0.7;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 16px;
+  min-height: 1.2em;
+}
+
+.pwa-progress-bar {
+  height: 8px;
+  background: var(--vp-c-divider, #e0dece);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.pwa-progress-fill {
+  height: 100%;
+  background: #03192e;
+  border-radius: 4px;
+  transition: width 200ms ease-out;
+  width: 0%;
+}
+
+.dark .pwa-progress-fill {
+  background: #6aafe8;
+}
+
+.pwa-progress-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: var(--vp-c-text-2, #48626e);
+  font-variant-numeric: tabular-nums;
+}
+
+
+/* === Locale Visibility Filter (Plan 20-2) ===
+ * Elements matching inactive locales get .locale-hidden applied
+ * by filterSidebarByLocales() in locale-filter.js
+ */
+.locale-hidden {
+  display: none !important;
+}
+
+/* Phase 23: Hide Bulgarian (bg) from the language switcher */
+.VPNav a[href="/bg/"], 
+.VPFlyout a[href="/bg/"],
+.VPMenuLink a[href="/bg/"],
+a.VPLink[href="/bg/"] {
+  display: none !important;
+}
+
+/* Fix for Latin letters in tables inside grammar-boxes becoming red */
+.grammar-box table strong em:not(:has(.sanskrit-dev)),
+.grammar-box table em strong:not(:has(.sanskrit-dev)),
+.grammar-box table strong:not(.signalrot):not(:has(.sanskrit-dev)),
+:where(.vp-doc, body) .grammar-box table strong em:not(:has(.sanskrit-dev)),
+:where(.vp-doc, body) .grammar-box table em strong:not(:has(.sanskrit-dev)),
+:where(.vp-doc, body) .grammar-box table strong:not(.signalrot):not(:has(.sanskrit-dev)) {
+  color: inherit !important;
+}
+
+/* Signalrot (Red Highlight) */
+.signalrot,
+:where(.vp-doc, body) .signalrot { 
+  color: #ee2c30 !important; 
+  font-weight: bold !important; 
+}
+.signalrot .sanskrit-dev,
+:where(.vp-doc, body) .signalrot .sanskrit-dev { 
+  color: #ee2c30 !important; 
+  font-weight: 600 !important; 
+}
+
+/* Gelber Leuchtstift (Marker) */
+.marker-yellow,
+mark.marker-yellow,
+:where(.vp-doc, body) .marker-yellow {
+  background-color: #fef08a !important;
+  color: #713f12 !important;
+  padding: 0.1em 0.35em;
+  border-radius: 3px;
+  font-weight: 600;
+}
+.dark .marker-yellow,
+.vscode-dark .marker-yellow,
+.dark :where(.vp-doc, body) .marker-yellow {
+  background-color: #854d0e !important;
+  color: #fef08a !important;
+}
+
+/* Sanskrit Devanagari */
+.sanskrit-dev,
+:where(.vp-doc, body) .sanskrit-dev {
+  font-family: "Sanskrit 2003", "Murty Sanskrit", "Noto Sans Devanagari", "Tiro Devanagari Sanskrit", serif !important;
+  color: #ee2c30 !important;
+  font-weight: 600;
+}
+
+/* Custom settings gear icon */
+.nav-gear-icon {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-color: currentColor;
+  mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>');
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: contain;
+  vertical-align: middle;
+}
+
+/* Consistent dropdown select & translations styling (Scholarly parchment style) */
+select,
+.vp-translations select,
+select.control-btn,
+.VPNavBarTranslations button,
+.VPNavBarTranslations select,
+.VPNavBarMenuLink.translations {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.03em !important;
+  padding: 6px 12px !important;
+  border-radius: 6px !important;
+  border: none !important;
+  background-color: var(--color-parchment-dark, #f1eee7) !important;
+  color: var(--color-ink, #03192e) !important;
+  outline: none !important;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.08) !important;
+  transition: all 0.2s ease !important;
+  cursor: pointer !important;
+}
+
+.dark select,
+.dark .vp-translations select,
+.dark select.control-btn,
+.dark .VPNavBarTranslations button,
+.dark .VPNavBarTranslations select,
+.dark .VPNavBarMenuLink.translations {
+  background-color: #241500 !important; /* dark burnt umber */
+  color: #fcf9f2 !important; /* parchment text */
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Dropdown list styling */
+.VPNavBarTranslations .menu,
+.VPNavBarTranslations .items,
+.VPNavBarTranslations .VPMenu {
+  background-color: var(--color-parchment, #fcf9f2) !important;
+  border: 1px solid var(--color-parchment-dark, #f1eee7) !important;
+  border-radius: 6px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+}
+
+.dark .VPNavBarTranslations .menu,
+.dark .VPNavBarTranslations .items,
+.dark .VPNavBarTranslations .VPMenu {
+  background-color: #241500 !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.VPNavBarTranslations .item,
+.VPNavBarTranslations .action {
+  color: var(--color-ink, #03192e) !important;
+  font-weight: 600 !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 11px !important;
+  text-transform: uppercase !important;
+}
+
+.VPNavBarTranslations .item:hover,
+.VPNavBarTranslations .action:hover {
+  background-color: var(--color-parchment-dark, #f1eee7) !important;
+}
+
+
+/* ── PRINT STYLES (Stufe 1) ──────────────────────────────────────────────── */
+@media print {
+  /* 1. Hide UI Elements */
+  .VPNav,
+  .VPSidebar,
+  .VPDocAside,
+  .VPDocFooter,
+  .VPFooter,
+  .VPLocalNav,
+  #payer-qa-tools,
+  .clean-btn,
+  .pager,
+  .edit-link,
+  .last-updated,
+  button {
+    display: none !important;
+  }
+
+  /* 2. Reset Layout to Full Width */
+  #app, .Layout, .VPContent, .VPDoc, .vp-doc, .container {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+  
+  .VPContent.has-sidebar {
+    padding-left: 0 !important;
+  }
+
+  /* 3. Typography & Colors (Force light mode) */
+  body, html {
+    background: white !important;
+    color: black !important;
+    font-size: 11pt !important;
+  }
+  :where(.vp-doc, body) h1, :where(.vp-doc, body) h2, :where(.vp-doc, body) h3, :where(.vp-doc, body) h4, :where(.vp-doc, body) p, :where(.vp-doc, body) li, :where(.vp-doc, body) td, :where(.vp-doc, body) th {
+    color: black !important;
+  }
+  
+  /* Borders and Boxes */
+  .grammar-box, .indent, .deleteme-box {
+    border: 1px solid #ccc !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  /* 4. Page Breaks */
+  h1, h2, h3 {
+    page-break-after: avoid !important;
+    break-after: avoid !important;
+    margin-top: 2em !important;
+  }
+  h1 {
+    page-break-before: always !important;
+    break-before: page !important;
+  }
+  /* First H1 doesn't need a break before */
+  :where(.vp-doc, body) > h1:first-child {
+    page-break-before: avoid !important;
+    break-before: avoid !important;
+    margin-top: 0 !important;
+  }
+  
+  table, tr, img, .grammar-box, .deleteme-box, .indent {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+  
+  /* Tables */
+  table {
+    border-collapse: collapse !important;
+    width: 100% !important;
+  }
+  th, td {
+    border: 1px solid #999 !important;
+  }
+}
+
+/* Base custom-block styles from VitePress */
+:where(.vp-doc, body) .custom-block {
+  padding: 16px 16px 8px;
+  border-radius: 8px;
+  margin: 16px 0;
+  border: 1px solid transparent;
+}
+
+/* md-box__title styling since plugin outputs this */
+:where(.vp-doc, body) .md-box__title {
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+/* Literatur-Box (Wissenschaftliche Quellenangaben) */
+:where(.vp-doc, body) .custom-block.literatur-box {
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 8px;
+  padding: 12px 16px;
+  background-color: var(--vp-c-bg-soft);
+  margin: 16px 0;
+  font-size: 0.9em;
+  position: relative;
+}
+
+:where(.vp-doc, body) .custom-block.literatur-box::before {
+  content: "📖";
+  margin-right: 8px;
+  font-size: 1.1em;
+}
+
+/* Gaga Box */
+.custom-block.gaga-box,
+:where(.vp-doc, body) .custom-block.gaga-box {
+  background-color: red !important;
+  color: yellow !important;
+  margin: 1.5rem 0;
+  padding: 1.25rem 1.25rem 1.25rem 2.5rem !important;
+  border-radius: 0 8px 8px 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}

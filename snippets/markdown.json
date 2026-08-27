@@ -1,0 +1,96 @@
+{
+  "Grammar Box": {
+    "prefix": "sbox",
+    "body": [
+      "::: grammar-box",
+      "$1",
+      ":::"
+    ],
+    "description": "Standard Payer grammar box for rules and paradigms"
+  },
+  "Nested Grammar Box (4 Colons)": {
+    "prefix": "sbox4",
+    "body": [
+      ":::: grammar-box",
+      "$1",
+      "::::"
+    ],
+    "description": "Nested grammar box (use when containing inner ::: elements like indent)"
+  },
+  "Indent Box": {
+    "prefix": "sindent",
+    "body": [
+      "::: indent",
+      "$1",
+      ":::"
+    ],
+    "description": "Indent block (e.g. for examples or sub-vocabularies)"
+  },
+  "Media Box": {
+    "prefix": "smedia",
+    "body": [
+      "::: media",
+      "![${1:Caption (one line)}](/images/${2:lektXXXX/image.png})",
+      "(Image source: [Details](/licenses#${3:lektXXXX}))",
+      ":::"
+    ],
+    "description": "Media block for scholarly image insertion"
+  },
+  "Delete Me Box": {
+    "prefix": "sdel",
+    "body": [
+      "::: deleteme-box",
+      "$1",
+      ":::"
+    ],
+    "description": "Hidden box for keeping original HTML metadata or sources"
+  },
+  "No Header Table Container": {
+    "prefix": "snohead",
+    "body": [
+      "::: no-header",
+      "| $1 | $2 |",
+      "| --- | --- |",
+      "| $3 | $4 |",
+      ":::"
+    ],
+    "description": "Wrapper to completely hide empty headers of tables"
+  },
+  "Devanagari Signal Red": {
+    "prefix": "ssig",
+    "body": [
+      ":sig[${1:text}]"
+    ],
+    "description": "Apply signal red color highlighting (:sig[text])"
+  },
+  "Yellow Highlighter Mark": {
+    "prefix": "smark",
+    "body": [
+      ":mark[${1:text}]"
+    ],
+    "description": "Apply yellow highlighter mark tag (:mark[text])"
+  },
+  "Table Line Break": {
+    "prefix": "sbr",
+    "body": [
+      ":br"
+    ],
+    "description": "Line break inside a markdown table cell"
+  },
+  "Sanskrit Brackets": {
+    "prefix": "ssan",
+    "body": [
+      "《${1:text}》"
+    ],
+    "description": "Insert Sanskrit Devanagari double angle brackets 《text》"
+  },
+  "Gaga Box": {
+    "prefix": "sgaga",
+    "body": [
+      "::: gaga-box",
+      "$1",
+      ":::"
+    ],
+    "description": "Indented box with red background and yellow text"
+  }
+}

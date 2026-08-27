@@ -1,0 +1,208 @@
+{
+  "name": "markdown-it-extensible-vscode",
+  "displayName": "Markdown-it Extensible Extension",
+  "description": "Configure and render custom markdown container syntax dynamically",
+  "version": "1.2.0",
+  "publisher": "birchville-org",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/birchville-org/markdown-it-extensible.git"
+  },
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "main": "./dist/index.js",
+  "activationEvents": [
+    "onLanguage:markdown"
+  ],
+  "categories": [
+    "Snippets",
+    "Other"
+  ],
+  "contributes": {
+    "snippets": [
+      {
+        "language": "markdown",
+        "path": "./snippets/markdown.json"
+      }
+    ],
+    "markdown.markdownItPlugins": true,
+    "markdown.previewStyles": [
+      "./media/payer-theme.css"
+    ],
+    "markdown.previewScripts": [
+      "./media/setup.js"
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "Extensible Markdown Settings",
+      "properties": {
+        "extensibleMarkdown.blockContainers": {
+          "type": "array",
+          "markdownDescription": "Custom block containers to support in markdown rendering. For example: `[ { \"name\": \"warning-box\", \"className\": \"alert-red\" } ]`",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "The markdown container block name (e.g. 'warning-box' for '::: warning-box')"
+              },
+              "className": {
+                "type": "string",
+                "description": "The CSS class to apply to the rendered HTML div"
+              }
+            },
+            "required": [
+              "name",
+              "className"
+            ]
+          },
+          "default": [
+            {
+              "name": "grammar-box",
+              "className": "grammar-box"
+            },
+            {
+              "name": "grammarbox",
+              "className": "grammar-box"
+            },
+            {
+              "name": "grammar-box2",
+              "className": "grammar-box2"
+            },
+            {
+              "name": "grammarbox2",
+              "className": "grammar-box2"
+            },
+            {
+              "name": "media",
+              "className": "media"
+            },
+            {
+              "name": "center",
+              "className": "center"
+            },
+            {
+              "name": "metrik-schema",
+              "className": "metrik-schema"
+            },
+            {
+              "name": "metrikschema",
+              "className": "metrik-schema"
+            },
+            {
+              "name": "important",
+              "className": "important"
+            },
+            {
+              "name": "deleteme-box",
+              "className": "deleteme-box"
+            },
+            {
+              "name": "deletemebox",
+              "className": "deleteme-box"
+            },
+            {
+              "name": "literatur-box",
+              "className": "literatur-box"
+            },
+            {
+              "name": "literatur",
+              "className": "literatur-box"
+            },
+            {
+              "name": "note-box",
+              "className": "note-box"
+            },
+            {
+              "name": "notebox",
+              "className": "note-box"
+            },
+            {
+              "name": "laut-table",
+              "className": "laut-table"
+            },
+            {
+              "name": "lauttable",
+              "className": "laut-table"
+            },
+            {
+              "name": "indent",
+              "className": "indent"
+            },
+            {
+              "name": "compact",
+              "className": "compact"
+            },
+            {
+              "name": "no-header",
+              "className": "no-header"
+            },
+            {
+              "name": "noheader",
+              "className": "no-header"
+            },
+            {
+              "name": "gaga-box",
+              "className": "gaga-box"
+            }
+          ]
+        },
+        "extensibleMarkdown.inlineDirectives": {
+          "type": "array",
+          "markdownDescription": "Custom inline directives to support in markdown rendering. For example: `[ { \"name\": \"mark\", \"className\": \"marker-yellow\", \"tag\": \"mark\" } ]`",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "The directive name (e.g. 'mark' for ':mark[text]')"
+              },
+              "className": {
+                "type": "string",
+                "description": "The CSS class to apply to the rendered HTML tag"
+              },
+              "tag": {
+                "type": "string",
+                "description": "The HTML tag to render (defaults to 'span', e.g. 'mark', 'strong')"
+              }
+            },
+            "required": [
+              "name"
+            ]
+          },
+          "default": [
+            {
+              "name": "sig",
+              "className": "signalrot",
+              "tag": "strong"
+            },
+            {
+              "name": "mark",
+              "className": "marker-yellow",
+              "tag": "mark"
+            }
+          ]
+        }
+      }
+    },
+    "configurationDefaults": {
+      "[markdown]": {
+        "editor.quickSuggestions": {
+          "other": "on",
+          "comments": "off",
+          "strings": "off"
+        }
+      }
+    }
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.1",
+    "markdown-it-extensible": "^1.2.1"
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run build",
+    "build": "esbuild src/index.js --bundle --outfile=dist/index.js --external:vscode --format=cjs --platform=node",
+    "watch": "esbuild src/index.js --bundle --outfile=dist/index.js --external:vscode --format=cjs --platform=node --watch"
+  }
+}
