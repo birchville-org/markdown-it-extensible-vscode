@@ -36,6 +36,36 @@ export interface InlineDirectiveOption {
 }
 
 /**
+ * Configuration options for container nesting normalization.
+ */
+export interface ContainerNestingOptions {
+  /**
+   * Set or iterable of container names (case-insensitive) to recognize as openers.
+   * If omitted, default registered containers and standard callout containers are recognized.
+   * Pass null to recognize any valid container name.
+   */
+  names?: Iterable<string> | null;
+
+  /**
+   * Whether to append missing closing fences at the end of the document.
+   * @default false
+   */
+  closeUnclosed?: boolean;
+}
+
+/**
+ * Result returned by adjustContainerNesting()
+ */
+export interface ContainerNestingResult {
+  /** The normalized Markdown source with adjusted colon counts */
+  repaired: string;
+  /** Whether any opening or closing fences were updated */
+  didRepair: boolean;
+  /** Number of container blocks adjusted */
+  adjustedCount: number;
+}
+
+/**
  * Options for the markdown-it-extensible plugin
  */
 export interface ScholarlyPluginOptions {
@@ -45,6 +75,14 @@ export interface ScholarlyPluginOptions {
    * @default true
    */
   injectStyles?: boolean;
+
+  /**
+   * Automatically normalizes container colon counts for nested blocks before parsing,
+   * ensuring outer containers always have strictly more colons than inner containers.
+   * Set to `false` to disable automatic nesting normalization, or provide options.
+   * @default true
+   */
+  autoNesting?: boolean | ContainerNestingOptions;
 
   /**
    * Custom list of block containers. Overrides or extends default containers.
@@ -88,6 +126,15 @@ export interface SyntaxHelp {
 }
 
 /**
+ * Adjusts container colons according to hierarchy depth.
+ * Outer containers are rewritten to use strictly more colons than any container nested inside them.
+ */
+export function adjustContainerNesting(
+  src: string,
+  options?: ContainerNestingOptions
+): ContainerNestingResult;
+
+/**
  * Extensible block container and inline directive plugin for markdown-it.
  */
 declare function scholarlyPlugin(md: any, options?: ScholarlyPluginOptions): void;
@@ -103,6 +150,14 @@ declare namespace scholarlyPlugin {
    * Helper function returning human-readable syntax documentation for host applications
    */
   export function getSyntaxHelp(): SyntaxHelp;
+
+  /**
+   * Adjusts container colons according to hierarchy depth.
+   */
+  export function adjustContainerNesting(
+    src: string,
+    options?: ContainerNestingOptions
+  ): ContainerNestingResult;
 }
 
 export default scholarlyPlugin;

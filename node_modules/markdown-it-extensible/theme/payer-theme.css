@@ -379,34 +379,76 @@ html[dir="rtl"] :where(.vp-doc, body) em {
   color: inherit !important;
 }
 
-/* Remove bottom margin from the last child inside any custom-block to avoid
+/* Remove top margin from the first child inside any custom-block / box container
+   to avoid child margin + container padding stacking (which causes an empty first line when no title is present). */
+:where(.vp-doc, body) .custom-block > *:first-child,
+:where(.vp-doc, body) [class*="-box"] > *:first-child,
+:where(.vp-doc, body) [class*="custom-"] > *:first-child,
+:where(.vp-doc, body) .metrik-schema > *:first-child,
+:where(.vp-doc, body) .laut-table > *:first-child,
+:where(.vp-doc, body) .center > *:first-child,
+:where(.vp-doc, body) .indent > *:first-child,
+:where(.vp-doc, body) .compact > *:first-child,
+.custom-block > *:first-child {
+  margin-top: 0 !important;
+}
+
+/* Remove bottom margin from the last child inside any custom-block / box container to avoid
    extra whitespace (child margin + container padding stacking). */
-:where(.vp-doc, body) .custom-block > *:last-child {
+:where(.vp-doc, body) .custom-block > *:last-child,
+:where(.vp-doc, body) [class*="-box"] > *:last-child,
+:where(.vp-doc, body) [class*="custom-"] > *:last-child,
+:where(.vp-doc, body) .metrik-schema > *:last-child,
+:where(.vp-doc, body) .laut-table > *:last-child,
+:where(.vp-doc, body) .center > *:last-child,
+:where(.vp-doc, body) .indent > *:last-child,
+:where(.vp-doc, body) .compact > *:last-child,
+.custom-block > *:last-child {
   margin-bottom: 0 !important;
 }
 
+/* Hide empty or whitespace-only title divs in all containers */
+:where(.vp-doc, body) .md-box__title:empty,
+:where(.vp-doc, body) .custom-block-title:empty,
+.md-box__title:empty,
+.custom-block-title:empty {
+  display: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  height: 0 !important;
+}
+
 /* Table-wrapper containers (center, no-header) nested directly inside a
-   grammar-box must not add their own margin/padding — the grammar-box
-   padding (1.25rem) already provides all the breathing room. */
-:where(.vp-doc, body) .grammar-box > .custom-block.center,
-:where(.vp-doc, body) .grammar-box > .custom-block.no-header {
+   container must not add their own margin/padding — the parent container
+   padding already provides all the breathing room. */
+:where(.vp-doc, body) .custom-block > .custom-block.center,
+:where(.vp-doc, body) .custom-block > .custom-block.no-header,
+:where(.vp-doc, body) [class*="-box"] > .custom-block.center,
+:where(.vp-doc, body) [class*="-box"] > .custom-block.no-header {
   margin: 0 !important;
   padding: 0 !important;
 }
 
-/* indent blocks nested directly inside a grammar-box: suppress the
+/* indent blocks nested directly inside a container: suppress the
    negative margin-top (-0.7rem) that is designed for post-paragraph
-   context — here the grammar-box padding already handles spacing. */
-:where(.vp-doc, body) .grammar-box > .custom-block.indent {
+   context — here the container padding already handles spacing. */
+:where(.vp-doc, body) .custom-block > .custom-block.indent,
+:where(.vp-doc, body) [class*="-box"] > .custom-block.indent {
   margin-top: 0 !important;
   margin-bottom: 0 !important;
 }
 
 /* Empty paragraphs created by blank lines around block-level children
-   inside a grammar-box contribute height without content — hide them. */
-:where(.vp-doc, body) .grammar-box > p:empty {
-  display: none;
+   inside containers contribute height without content — hide them. */
+:where(.vp-doc, body) .custom-block > p:empty,
+:where(.vp-doc, body) [class*="-box"] > p:empty,
+:where(.vp-doc, body) .metrik-schema > p:empty,
+:where(.vp-doc, body) .laut-table > p:empty,
+.custom-block > p:empty {
+  display: none !important;
   margin: 0 !important;
+  padding: 0 !important;
+  height: 0 !important;
 }
 
 /* Media & Image Alignment */

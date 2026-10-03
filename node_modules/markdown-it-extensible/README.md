@@ -1,5 +1,4 @@
-Warning: Identity file /Users/marco/.ssh/id_rsa not accessible: No such file or directory.
-# markdown-it-extensible (v1.1.0)
+# markdown-it-extensible (v1.3.0)
 
 A highly extensible, zero-code block container and inline directive syntax engine for [`markdown-it`](https://github.com/markdown-it/markdown-it).
 
@@ -21,14 +20,14 @@ While static site generators like VitePress offer built-in container support, cr
 ## Key Features
 
 - 📦 **Dynamic Block Containers (`::: name [Title]`)**: Add or customize custom callouts with optional title headers.
+- 🔄 **Automatic Container Nesting Normalization (`autoNesting`)**: Automatically normalizes colon counts for nested containers (`:::: outer` -> `::: inner`), preventing premature container closures in CommonMark/markdown-it.
 - 🎨 **Dynamic Inline Directives (`:name[Content]`)**: Map custom inline markup to any CSS class or HTML tag (`<strong>`, `<mark>`, `<span>`, etc.).
 - 🚀 **File-Based Configuration**: Define custom syntax elements effortlessly via a `markdown-it-extensible.json` file—no JS required.
-- 🚀 **File-Based Configuration**: Define custom syntax elements effortlessly via a `markdown-it-extensible.json` file—no JS required.
 - 🚀 **Zero-Code CSS Fallback**: Use any `:class-name[Text]` in Markdown—it automatically renders `<span class="class-name">Text</span>` without needing JavaScript registration.
-- 📐 **Multi-Level Nesting & Case-Insensitive Matching**: Handles `::::` nesting and case-insensitive container names (`::: Grammar-Box`, `::: GRAMMAR-BOX`).
+- 📐 **Multi-Level Nesting & Case-Insensitive Matching**: Handles arbitrary depth nesting and case-insensitive container names (`::: Grammar-Box`, `::: GRAMMAR-BOX`).
 - 📚 **Built-in Scholarly Syntax**: Native support for Sanskrit Devanagari brackets (`《धर्मः》`), intra-table line breaks (`:br`), and intra-table indents (`:indent`).
 - 🔷 **TypeScript First Class Support**: Comes with `index.d.ts` providing full autocomplete, hover docs, and type safety in VS Code and WebStorm.
-- 🛠 **Programmatic Syntax Help API**: Exposes `getSyntaxHelp()` so host applications (like Zentauri, Payer, or custom editors) can dynamically render help modals and cheatsheets.
+- 🛠 **Programmatic Syntax Help API**: Exposes `getSyntaxHelp()` and `adjustContainerNesting()` so host applications (like Zentauri, Payer, or custom editors) can dynamically render help modals and normalize documents.
 
 ---
 
@@ -210,6 +209,49 @@ const options: ScholarlyPluginOptions = {
 };
 
 const md = new MarkdownIt().use(extensiblePlugin, options);
+```
+
+---
+
+## Container Nesting Normalization (`autoNesting`)
+
+In CommonMark and `markdown-it-container`, a container fence closes at the first closing fence having at least as many colons as the opener. When containers are nested with equal colon counts (e.g. `::: note-box` containing `::: grammar-box`), the inner closer prematurely terminates the outer block.
+
+`markdown-it-extensible` solves this automatically:
+1. **Integrated Core Rule (`autoNesting`)**: Active by default (`autoNesting: true`). Automatically rewrites `state.src` before parsing so that outer container fences have strictly more colons than inner fences (`:::: note-box` wrapping `::: grammar-box`).
+2. **Standalone Utility Function (`adjustContainerNesting`)**: Can be imported directly by host editors, pre-save hooks, or QA viewers.
+
+```javascript
+import { adjustContainerNesting } from 'markdown-it-extensible/nesting';
+
+const input = `::: note-box
+::: grammar-box
+Inner content
+:::
+:::`;
+
+const { repaired, didRepair, adjustedCount } = adjustContainerNesting(input);
+// repaired:
+// :::: note-box
+// ::: grammar-box
+// Inner content
+// :::
+// ::::
+```
+
+### Disabling or Customizing `autoNesting`
+
+```javascript
+// Disable automatic nesting normalization
+md.use(extensiblePlugin, { autoNesting: false });
+
+// Or specify custom options
+md.use(extensiblePlugin, {
+  autoNesting: {
+    names: ['grammar-box', 'note-box', 'tip'], // only recognize specific containers
+    closeUnclosed: true                        // auto-close unclosed containers
+  }
+});
 ```
 
 ---
