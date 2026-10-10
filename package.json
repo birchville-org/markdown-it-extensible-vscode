@@ -2,11 +2,11 @@
   "name": "markdown-it-extensible-vscode",
   "displayName": "Markdown-it Extensible Extension",
   "description": "Configure and render custom markdown container syntax dynamically",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "publisher": "birchville-org",
   "repository": {
     "type": "git",
-    "url": "https://github.com/birchville-org/markdown-it-extensible.git"
+    "url": "https://github.com/birchville-org/markdown-it-extensible-vscode.git"
   },
   "engines": {
     "vscode": "^1.80.0"
@@ -198,12 +198,13 @@
   },
   "devDependencies": {
     "esbuild": "^0.28.1",
-    "markdown-it-extensible": "^1.3.0"
+    "markdown-it-extensible": "^1.3.1"
   },
   "scripts": {
     "vscode:prepublish": "npm run build",
     "build": "esbuild src/index.js --bundle --outfile=dist/index.js --external:vscode --format=cjs --platform=node",
     "watch": "esbuild src/index.js --bundle --outfile=dist/index.js --external:vscode --format=cjs --platform=node --watch"
   },
-  "icon": "icon.png"
+  "icon": "icon.png",
+  "homepage": "https://birchville-org.github.io/markdown-it-extensible/"
 }

@@ -1,4 +1,3 @@
-import type { PluginWithParams } from 'markdown-it';
 
 /**
  * Configuration option for a custom block container (::: containerName [Title])

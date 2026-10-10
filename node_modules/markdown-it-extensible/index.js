@@ -116,8 +116,9 @@ function scholarlyPlugin(md, options = {}) {
 
   blockContainers.forEach(containerOpt => {
     const box = containerOpt.name;
+    const escapedBox = box.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     const cssClass = containerOpt.className;
-    const containerRe = new RegExp(`^\\s*${box}(?:\\s+(.*)|(?=\\[)(.*))?$`, "i");
+    const containerRe = new RegExp(`^\\s*${escapedBox}(?:\\s+(.*)|(?=\\[)(.*))?$`, "i");
 
     md.use(container, box, {
       validate: (params) => params.match(containerRe),
@@ -176,8 +177,8 @@ function scholarlyPlugin(md, options = {}) {
     });
   });
 
-  const scholarlyReTable = /([⟪《][^⟫⟩》]+[⟫⟩》](?:\s*\|\|?)?|(?<!:):[a-zA-Z0-9_-]+\[.*?\]|(?<!:):br|(?<!:):indent)/;
-  const scholarlyReNormal = /([⟪《][^⟫⟩》]+[⟫⟩》](?:\s*\|\|?)?|(?<!:):[a-zA-Z0-9_-]+\[.*?\])/;
+  const scholarlyReTable = /([⟪《][^⟫⟩》]+[⟫⟩》](?:\s*\|\|?)?|(?<!:):[a-zA-Z0-9_-]+\[(?:[^\[\]]|\[[^\[\]]*\])*\]|(?<!:):br|(?<!:):indent)/;
+  const scholarlyReNormal = /([⟪《][^⟫⟩》]+[⟫⟩》](?:\s*\|\|?)?|(?<!:):[a-zA-Z0-9_-]+\[(?:[^\[\]]|\[[^\[\]]*\])*\])/;
   const getScholarlyRe = (inTable = false) => inTable ? scholarlyReTable : scholarlyReNormal;
 
   md.core.ruler.after('linkify', 'scholarly_fixes', (state) => {
@@ -232,12 +233,19 @@ function scholarlyPlugin(md, options = {}) {
                 }
               }
 
-              const span = new state.Token('html_inline', '', 0);
-              span.content = `<span class="sanskrit-dev" translate="no" lang="sa">${innerText}${dandaHtml}</span>`;
-              newChildren.push(span);
+              const open = new state.Token('span_open', 'span', 1);
+              open.attrs = [['class', 'sanskrit-dev'], ['translate', 'no'], ['lang', 'sa']];
+              newChildren.push(open);
+
+              const text = new state.Token('text', '', 0);
+              text.content = innerText + dandaHtml;
+              newChildren.push(text);
+
+              const close = new state.Token('span_close', 'span', -1);
+              newChildren.push(close);
             } 
             // Configurable & Zero-Code Inline Directives: :sig[...], :mark[...], :custom[...]
-            else if (part.match(/^:[a-zA-Z0-9_-]+\[.*\]$/)) {
+            else if (part.match(/^:[a-zA-Z0-9_-]+\[(?:[^\[\]]|\[[^\[\]]*\])*\]$/)) {
               const colonPos = part.indexOf(':');
               const bracketPos = part.indexOf('[');
               const dirName = part.slice(colonPos + 1, bracketPos);

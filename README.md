@@ -1,5 +1,7 @@
 # Markdown-it Extensible Extension
 
+> 📖 **Vollständige Syntax-Dokumentation & Live-Guide:** [https://birchville-org.github.io/markdown-it-extensible/](https://birchville-org.github.io/markdown-it-extensible/)
+
 A configurable VS Code extension for dynamically defining and visualizing custom markdown container blocks and inline directives (such as `::: grammar-box`, `:mark[text]`, `:sig[text]`, etc.).
 
 ## Features
@@ -25,7 +27,7 @@ Type the following prefixes into a `.md` file and press `Tab`:
 ### Option A: Install VSIX Package
 Download or build the `.vsix` file and install it directly:
 ```bash
-code --install-extension markdown-it-extensible-vscode-1.3.0.vsix
+code --install-extension markdown-it-extensible-vscode-1.3.1.vsix
 ```
 
 ### Option B: Symlink into VS Code Extensions Directory

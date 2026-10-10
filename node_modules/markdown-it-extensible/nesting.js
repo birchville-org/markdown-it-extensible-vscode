@@ -57,9 +57,14 @@ function adjustContainerNesting(src, options = {}) {
     if (!fenceChar) {
       const fm = line.match(CODE_FENCE_OPEN_RE);
       if (fm) {
-        fenceChar = fm[1][0];
-        fenceLen = fm[1].length;
-        continue;
+        const char = fm[1][0];
+        const len = fm[1].length;
+        const infoString = line.slice(fm[0].length);
+        if (!infoString.includes(char)) {
+          fenceChar = char;
+          fenceLen = len;
+          continue;
+        }
       }
     } else {
       const fm = line.match(CODE_FENCE_CLOSE_RE);

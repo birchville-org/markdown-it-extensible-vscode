@@ -132,9 +132,14 @@ var require_nesting = __commonJS({
         if (!fenceChar) {
           const fm = line.match(CODE_FENCE_OPEN_RE);
           if (fm) {
-            fenceChar = fm[1][0];
-            fenceLen = fm[1].length;
-            continue;
+            const char = fm[1][0];
+            const len = fm[1].length;
+            const infoString = line.slice(fm[0].length);
+            if (!infoString.includes(char)) {
+              fenceChar = char;
+              fenceLen = len;
+              continue;
+            }
           }
         } else {
           const fm = line.match(CODE_FENCE_CLOSE_RE);
@@ -320,8 +325,9 @@ ${cachedCss}
       }
       blockContainers.forEach((containerOpt) => {
         const box = containerOpt.name;
+        const escapedBox = box.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
         const cssClass = containerOpt.className;
-        const containerRe = new RegExp(`^\\s*${box}(?:\\s+(.*)|(?=\\[)(.*))?$`, "i");
+        const containerRe = new RegExp(`^\\s*${escapedBox}(?:\\s+(.*)|(?=\\[)(.*))?$`, "i");
         md.use(container, box, {
           validate: (params) => params.match(containerRe),
           render: (tokens, idx) => {
@@ -372,8 +378,8 @@ ${titleHtml}`;
           tag: dir.tag || "span"
         });
       });
-      const scholarlyReTable = /([⟪《][^⟫⟩》]+[⟫⟩》](?:\s*\|\|?)?|(?<!:):[a-zA-Z0-9_-]+\[.*?\]|(?<!:):br|(?<!:):indent)/;
-      const scholarlyReNormal = /([⟪《][^⟫⟩》]+[⟫⟩》](?:\s*\|\|?)?|(?<!:):[a-zA-Z0-9_-]+\[.*?\])/;
+      const scholarlyReTable = /([⟪《][^⟫⟩》]+[⟫⟩》](?:\s*\|\|?)?|(?<!:):[a-zA-Z0-9_-]+\[(?:[^\[\]]|\[[^\[\]]*\])*\]|(?<!:):br|(?<!:):indent)/;
+      const scholarlyReNormal = /([⟪《][^⟫⟩》]+[⟫⟩》](?:\s*\|\|?)?|(?<!:):[a-zA-Z0-9_-]+\[(?:[^\[\]]|\[[^\[\]]*\])*\])/;
       const getScholarlyRe = (inTable = false) => inTable ? scholarlyReTable : scholarlyReNormal;
       md.core.ruler.after("linkify", "scholarly_fixes", (state) => {
         let insideTable = false;
@@ -418,10 +424,15 @@ ${titleHtml}`;
                       innerText = innerText.slice(0, -pipeMatchInside[0].length);
                     }
                   }
-                  const span = new state.Token("html_inline", "", 0);
-                  span.content = `<span class="sanskrit-dev" translate="no" lang="sa">${innerText}${dandaHtml}</span>`;
-                  newChildren.push(span);
-                } else if (part.match(/^:[a-zA-Z0-9_-]+\[.*\]$/)) {
+                  const open = new state.Token("span_open", "span", 1);
+                  open.attrs = [["class", "sanskrit-dev"], ["translate", "no"], ["lang", "sa"]];
+                  newChildren.push(open);
+                  const text = new state.Token("text", "", 0);
+                  text.content = innerText + dandaHtml;
+                  newChildren.push(text);
+                  const close = new state.Token("span_close", "span", -1);
+                  newChildren.push(close);
+                } else if (part.match(/^:[a-zA-Z0-9_-]+\[(?:[^\[\]]|\[[^\[\]]*\])*\]$/)) {
                   const colonPos = part.indexOf(":");
                   const bracketPos = part.indexOf("[");
                   const dirName = part.slice(colonPos + 1, bracketPos);

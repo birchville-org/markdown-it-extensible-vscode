@@ -4,6 +4,26 @@ All notable changes to `markdown-it-extensible` will be documented in this file.
 
 ---
 
+## [1.3.1] - 2026-10-10
+
+### Sicherheit & Sandbox
+- **RegExp-Injection-Schutz:** Escape dynamischer Containernamen via `escapeRegex()` in `index.js`, um ReDoS und unerwünschte Regex-Injektionen in der Validierungs-Regel zu verhindern.
+- **XSS-Härtung (Sanskrit Markup):** Sanskrit-Klammerparser (`《...》`) ersetzt rohe HTML-Injektion (`html_inline`) durch Markdown-It Token-Streaming (`span_open`, `text`, `span_close`), wodurch injizierter HTML-Code sicher escaped wird.
+
+### Datenintegrität & Kernfunktionen
+- **Code-Fence Regex Trap Behoben:** `nesting.js` Matcher für Codefences (`CODE_FENCE_REGEX`) korrigiert, sodass einzeilige Inline-Codeblöcke mit Backticks nicht mehr versehentlich bis zum nächsten Codeblock das gesamte Dokument verschlucken.
+- **Verschachtelte Klammern in Inline-Direktiven:** `:[name][...]` unterstützt nun verschachtelte eckige Klammern im Inhalt (`\[(?:[^\[\]]|\[[^\[\]]*\])*\]`).
+
+### Plattform- & Backend-Stabilität
+- **TypeScript Typ-Korrektur:** Veralteten und in Markdown-It v14/v15 nicht mehr existenten Import `PluginWithParams` aus `index.d.ts` entfernt und durch saubere Funktions- und Export-Deklarationen ersetzt.
+- **Repository-URL Normalisierung:** Format in `package.json` bereinigt.
+
+### Dokumentation
+- **VitePress Dokumentation:** Integrierte Benutzer- und Entwicklerdokumentation im `docs/`-Verzeichnis nach dem Birchville „Scholarly Synthesis“ Standard (Warmes Elfenbein, Midnight Navy, Frosted Glass, Wappen-Integration).
+- **GitHub Pages CI/CD:** Automatisierter Deployment-Workflow für Dokumentation via GitHub Actions (`.github/workflows/deploy-docs.yml`).
+
+---
+
 ## [1.3.0] - 2026-10-03
 
 ### Added
