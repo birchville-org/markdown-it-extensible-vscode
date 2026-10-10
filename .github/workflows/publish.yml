@@ -25,6 +25,11 @@ jobs:
         run: npm run build
 
       - name: Publish to VS Code Marketplace
-        run: npx @vscode/vsce publish --skip-license -p ${{ secrets.VSCE_PAT }}
+        run: |
+          if [ -z "$VSCE_PAT" ]; then
+            echo "::error::VSCE_PAT Secret ist nicht gesetzt oder leer! Bitte unter Settings > Secrets > Actions hinterlegen."
+            exit 1
+          fi
+          npx @vscode/vsce publish --skip-license -p "$VSCE_PAT"
         env:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
