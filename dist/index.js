@@ -151,8 +151,10 @@ var require_nesting = __commonJS({
           continue;
         }
         const om = line.match(OPEN_RE);
-        if (om && (!names || names.has(om[4].toLowerCase()))) {
+        if (om) {
+          const isKnown = !names || names.has(om[4].toLowerCase());
           const block = {
+            isKnown,
             openLine: i,
             closeLine: null,
             closeColons: 0,
@@ -195,6 +197,7 @@ var require_nesting = __commonJS({
       let didRepair = false;
       let adjustedCount = 0;
       for (const b of all) {
+        if (!b.isKnown) continue;
         const openChanged = b.target !== b.colons;
         const closeChanged = b.closeLine !== null && b.closeColons !== b.target;
         if (!openChanged && !closeChanged) continue;
@@ -207,9 +210,10 @@ var require_nesting = __commonJS({
         }
       }
       if (options.closeUnclosed && stack.length) {
-        didRepair = true;
         while (stack.length) {
           const unclosed = stack.pop();
+          if (!unclosed.isKnown) continue;
+          didRepair = true;
           adjustedCount++;
           lines.push(`${unclosed.indent}${":".repeat(unclosed.target)}`);
         }
@@ -231,11 +235,43 @@ var require_markdown_it_extensible = __commonJS({
     var path = require("path");
     var container = require_markdown_it_container();
     var { adjustContainerNesting } = require_nesting();
-    var cachedCss = "";
-    try {
-      cachedCss = fs2.readFileSync(path.join(__dirname, "theme/payer-theme.css"), "utf8");
-    } catch (e) {
-      console.warn("markdown-it-extensible: Could not load theme/payer-theme.css", e.message);
+    var cachedCss = null;
+    function getCachedCss(warnIfMissing = false) {
+      if (cachedCss !== null) return cachedCss;
+      try {
+        cachedCss = fs2.readFileSync(path.join(__dirname, "theme/payer-theme.css"), "utf8");
+      } catch (e) {
+        cachedCss = "";
+        if (warnIfMissing) {
+          console.warn("markdown-it-extensible: Could not load theme/payer-theme.css", e.message);
+        }
+      }
+      return cachedCss;
+    }
+    var ALLOWED_INLINE_TAGS = /* @__PURE__ */ new Set([
+      "span",
+      "strong",
+      "mark",
+      "em",
+      "b",
+      "i",
+      "u",
+      "code",
+      "small",
+      "sub",
+      "sup",
+      "abbr",
+      "cite",
+      "kbd",
+      "s",
+      "del",
+      "ins",
+      "time",
+      "var"
+    ]);
+    function sanitizeClassName(cls) {
+      if (typeof cls !== "string") return "";
+      return cls.replace(/[^a-zA-Z0-9_\-\s]/g, "").trim();
     }
     var DEFAULT_BLOCK_CONTAINERS = [
       { name: "grammar-box", className: "grammar-box" },
@@ -267,31 +303,42 @@ var require_markdown_it_extensible = __commonJS({
     ];
     function scholarlyPlugin(md, options = {}) {
       let configFromFile = {};
-      try {
-        const configPath = path.resolve(process.cwd(), "markdown-it-extensible.json");
-        if (fs2.existsSync(configPath)) {
-          configFromFile = JSON.parse(fs2.readFileSync(configPath, "utf8"));
+      if (options.configFile !== false) {
+        try {
+          const configPath = typeof options.configFile === "string" ? path.resolve(options.configFile) : path.resolve(process.cwd(), "markdown-it-extensible.json");
+          if (fs2.existsSync(configPath)) {
+            configFromFile = JSON.parse(fs2.readFileSync(configPath, "utf8"));
+          }
+        } catch (e) {
+          console.warn("markdown-it-extensible: Invalid config file (markdown-it-extensible.json)", e.message);
         }
-      } catch (e) {
-        console.warn("markdown-it-extensible: Invalid config file (markdown-it-extensible.json)", e.message);
       }
       const mergedOptions = Object.assign({}, configFromFile, options);
       options = mergedOptions;
       const injectStyles = options.injectStyles !== false;
-      if (injectStyles && cachedCss) {
+      const css = injectStyles ? getCachedCss(options.injectStyles === true) : "";
+      if (injectStyles && css) {
         md.core.ruler.push("extensible_styles_inject", (state) => {
           if (state.tokens.length > 0 && !state.env.__extensibleStylesInjected) {
             state.env.__extensibleStylesInjected = true;
             const styleToken = new state.Token("html_block", "", 0);
             styleToken.content = `<style>
-${cachedCss}
+${css}
 </style>
 `;
             state.tokens.unshift(styleToken);
           }
         });
       }
-      const blockContainers = (options.blockContainers && options.blockContainers.length > 0 ? options.blockContainers : DEFAULT_BLOCK_CONTAINERS).slice().sort((a, b) => b.name.length - a.name.length);
+      const rawBlockContainers = options.blockContainers && Array.isArray(options.blockContainers) && options.blockContainers.length > 0 ? options.blockContainers : DEFAULT_BLOCK_CONTAINERS;
+      const blockContainers = rawBlockContainers.filter((c) => c && typeof c.name === "string" && c.name.trim().length > 0).map((c) => {
+        const name = c.name.trim();
+        const rawClass = typeof c.className === "string" && c.className.trim() ? c.className.trim() : name;
+        return {
+          name,
+          className: sanitizeClassName(rawClass) || sanitizeClassName(name) || "custom-box"
+        };
+      }).sort((a, b) => b.name.length - a.name.length);
       if (options.autoNesting !== false) {
         const nestingOpts = typeof options.autoNesting === "object" && options.autoNesting !== null ? options.autoNesting : {};
         const STANDARD_CONTAINERS = ["tip", "warning", "danger", "details", "info", "note"];
@@ -326,7 +373,7 @@ ${cachedCss}
       blockContainers.forEach((containerOpt) => {
         const box = containerOpt.name;
         const escapedBox = box.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-        const cssClass = containerOpt.className;
+        const cssClass = sanitizeClassName(containerOpt.className) || "custom-box";
         const containerRe = new RegExp(`^\\s*${escapedBox}(?:\\s+(.*)|(?=\\[)(.*))?$`, "i");
         md.use(container, box, {
           validate: (params) => params.match(containerRe),
@@ -338,7 +385,7 @@ ${cachedCss}
               if (rawTitle) {
                 const titleMatch = rawTitle.match(/^\[([^\]]+)\]/);
                 if (titleMatch && titleMatch[1].trim()) {
-                  titleHtml = `<div class="md-box__title">${titleMatch[1]}</div>
+                  titleHtml = `<div class="md-box__title">${md.utils.escapeHtml(titleMatch[1].trim())}</div>
 `;
                 }
               }
@@ -370,16 +417,27 @@ ${titleHtml}`;
         });
       } catch (e) {
       }
-      const inlineDirectives = options.inlineDirectives && options.inlineDirectives.length > 0 ? options.inlineDirectives : DEFAULT_INLINE_DIRECTIVES;
+      const rawInlineDirectives = options.inlineDirectives && Array.isArray(options.inlineDirectives) && options.inlineDirectives.length > 0 ? options.inlineDirectives : DEFAULT_INLINE_DIRECTIVES;
+      const inlineDirectives = rawInlineDirectives.filter((d) => d && typeof d.name === "string" && d.name.trim().length > 0).map((d) => {
+        const name = d.name.trim();
+        const rawClass = typeof d.className === "string" && d.className.trim() ? d.className.trim() : name;
+        const cleanClass = sanitizeClassName(rawClass) || sanitizeClassName(name) || "custom-dir";
+        const rawTag = typeof d.tag === "string" ? d.tag.trim().toLowerCase() : "span";
+        return {
+          name,
+          className: cleanClass,
+          tag: ALLOWED_INLINE_TAGS.has(rawTag) ? rawTag : "span"
+        };
+      });
       const directiveMap = /* @__PURE__ */ new Map();
       inlineDirectives.forEach((dir) => {
         directiveMap.set(dir.name, {
-          className: dir.className || dir.name,
-          tag: dir.tag || "span"
+          className: dir.className,
+          tag: dir.tag
         });
       });
-      const scholarlyReTable = /([⟪《][^⟫⟩》]+[⟫⟩》](?:\s*\|\|?)?|(?<!:):[a-zA-Z0-9_-]+\[(?:[^\[\]]|\[[^\[\]]*\])*\]|(?<!:):br|(?<!:):indent)/;
-      const scholarlyReNormal = /([⟪《][^⟫⟩》]+[⟫⟩》](?:\s*\|\|?)?|(?<!:):[a-zA-Z0-9_-]+\[(?:[^\[\]]|\[[^\[\]]*\])*\])/;
+      const scholarlyReTable = /([⟪《][^⟫⟩》]+[⟫⟩》](?:\s*\|\|?)?|(?<![\w:-]):[a-zA-Z][a-zA-Z0-9_-]*\[(?:[^\[\]]|\[[^\[\]]*\])*\]|(?<![\w:-]):br(?!\w)|(?<![\w:-]):indent(?!\w))/;
+      const scholarlyReNormal = /([⟪《][^⟫⟩》]+[⟫⟩》](?:\s*\|\|?)?|(?<![\w:-]):[a-zA-Z][a-zA-Z0-9_-]*\[(?:[^\[\]]|\[[^\[\]]*\])*\])/;
       const getScholarlyRe = (inTable = false) => inTable ? scholarlyReTable : scholarlyReNormal;
       md.core.ruler.after("linkify", "scholarly_fixes", (state) => {
         let insideTable = false;
@@ -432,14 +490,15 @@ ${titleHtml}`;
                   newChildren.push(text);
                   const close = new state.Token("span_close", "span", -1);
                   newChildren.push(close);
-                } else if (part.match(/^:[a-zA-Z0-9_-]+\[(?:[^\[\]]|\[[^\[\]]*\])*\]$/)) {
+                } else if (part.match(/^:[a-zA-Z][a-zA-Z0-9_-]*\[(?:[^\[\]]|\[[^\[\]]*\])*\]$/)) {
                   const colonPos = part.indexOf(":");
                   const bracketPos = part.indexOf("[");
                   const dirName = part.slice(colonPos + 1, bracketPos);
                   const innerText = part.slice(bracketPos + 1, -1);
                   const config = directiveMap.get(dirName) || { className: dirName, tag: "span" };
-                  const tagName = config.tag || "span";
-                  const className = config.className || dirName;
+                  const rawTag = config.tag || "span";
+                  const tagName = ALLOWED_INLINE_TAGS.has(rawTag.toLowerCase()) ? rawTag.toLowerCase() : "span";
+                  const className = sanitizeClassName(config.className || dirName) || "custom-dir";
                   const openTag = new state.Token("html_inline", "", 0);
                   openTag.content = `<${tagName} class="${className}">`;
                   newChildren.push(openTag);
