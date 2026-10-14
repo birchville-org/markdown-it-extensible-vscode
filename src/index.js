@@ -25,13 +25,14 @@ function extendMarkdownIt(md) {
 
         const res = md.use(extensiblePlugin, {
             blockContainers: blockContainers,
-            inlineDirectives: inlineDirectives
+            inlineDirectives: inlineDirectives,
+            configFile: false
         });
         logDebug('md.use(extensiblePlugin) returned successfully');
         return res;
     } catch (e) {
         logDebug('Error in extendMarkdownIt: ' + (e.stack || e));
-        return md.use(extensiblePlugin);
+        return md.use(extensiblePlugin, { configFile: false });
     }
 }
 
@@ -86,7 +87,7 @@ function activate(context) {
                 return items;
             }
         },
-        ':', 's' // Trigger bei Eintippen von ':' oder 's'
+        ':' // Trigger nur bei Doppelpunkt ':' (z. B. ':::' oder ':directive')
     );
 
     if (context && context.subscriptions) {

@@ -27,7 +27,7 @@ Type the following prefixes into a `.md` file and press `Tab`:
 ### Option A: Install VSIX Package
 Download or build the `.vsix` file and install it directly:
 ```bash
-code --install-extension markdown-it-extensible-vscode-1.3.1.vsix
+code --install-extension markdown-it-extensible-vscode-1.3.2.vsix
 ```
 
 ### Option B: Symlink into VS Code Extensions Directory
