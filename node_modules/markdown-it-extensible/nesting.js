@@ -77,8 +77,10 @@ function adjustContainerNesting(src, options = {}) {
     }
 
     const om = line.match(OPEN_RE);
-    if (om && (!names || names.has(om[4].toLowerCase()))) {
+    if (om) {
+      const isKnown = !names || names.has(om[4].toLowerCase());
       const block = {
+        isKnown,
         openLine: i,
         closeLine: null,
         closeColons: 0,
@@ -125,6 +127,8 @@ function adjustContainerNesting(src, options = {}) {
   let adjustedCount = 0;
 
   for (const b of all) {
+    if (!b.isKnown) continue;
+
     const openChanged = b.target !== b.colons;
     const closeChanged = b.closeLine !== null && b.closeColons !== b.target;
     if (!openChanged && !closeChanged) continue;
@@ -139,9 +143,10 @@ function adjustContainerNesting(src, options = {}) {
   }
 
   if (options.closeUnclosed && stack.length) {
-    didRepair = true;
     while (stack.length) {
       const unclosed = stack.pop();
+      if (!unclosed.isKnown) continue;
+      didRepair = true;
       adjustedCount++;
       lines.push(`${unclosed.indent}${':'.repeat(unclosed.target)}`);
     }

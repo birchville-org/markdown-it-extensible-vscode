@@ -14,6 +14,9 @@ Type the following prefixes into a `.md` file and press `Tab`:
 
 - **`sbox`**: Creates a standard `::: grammar-box` for rules and paradigms.
 - **`sbox4`**: Creates a nested `:::: grammar-box` (useful when containing inner `::: indent` blocks).
+- **`swarn`**: Creates a `::: warning-box` for didactic warnings and pitfalls (Birchville Scholarly Terracotta).
+- **`sverse`**: Creates a `::: verse-box` for Ślokas, Mantras, reading texts and metrics.
+- **`snote`**: Creates a `::: note-box` for philological apparatus, realia, and sources.
 - **`sindent`**: Creates an `::: indent` block (e.g. for indented examples or sub-vocabularies).
 - **`smedia`**: Creates a complete `::: media` block including placeholders for image path and formatted attribution.
 - **`sdel`**: Creates a `::: deleteme-box` for hidden metadata or draft notes.
@@ -27,12 +30,12 @@ Type the following prefixes into a `.md` file and press `Tab`:
 ### Option A: Install VSIX Package
 Download or build the `.vsix` file and install it directly:
 ```bash
-code --install-extension markdown-it-extensible-vscode-1.3.2.vsix
+code --install-extension markdown-it-extensible-vscode-1.4.0.vsix
 ```
 
 ### Option B: Symlink into VS Code Extensions Directory
 ```bash
-ln -s $(pwd)/vscode-extension ~/.vscode/extensions/markdown-it-extensible-vscode
+ln -s $(pwd) ~/.vscode/extensions/markdown-it-extensible-vscode
 ```
 
 ## Customization & Configuration Guide
@@ -178,7 +181,7 @@ The extension automatically generates dynamic editor autocomplete snippets for a
     :badge[text]
     ```
 
-Static fallback snippets for default elements can also be customized directly in [`snippets/markdown.json`](file:///Volumes/SanDisk1TB/proj/markdown-it-extensible/vscode-extension/snippets/markdown.json).
+Static fallback snippets for default elements can also be customized directly in [`snippets/markdown.json`](./snippets/markdown.json).
 
 ### 4. Integration of SVG Graphics and Icons
 

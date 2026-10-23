@@ -84,13 +84,31 @@
     ],
     "description": "Insert Sanskrit Devanagari double angle brackets 《text》"
   },
-  "Gaga Box": {
-    "prefix": "sgaga",
+  "Warning Box": {
+    "prefix": "swarn",
     "body": [
-      "::: gaga-box",
+      "::: warning-box [${1:Titel}]",
+      "$2",
+      ":::"
+    ],
+    "description": "Warning box for pedagogical warnings and pitfalls (Birchville Scholarly Terracotta)"
+  },
+  "Verse Box": {
+    "prefix": "sverse",
+    "body": [
+      "::: verse-box",
       "$1",
       ":::"
     ],
-    "description": "Indented box with red background and yellow text"
+    "description": "Verse box for Ślokas, Mantras, reading texts and metrics"
+  },
+  "Note Box": {
+    "prefix": "snote",
+    "body": [
+      "::: note-box [${1:Titel}]",
+      "$2",
+      ":::"
+    ],
+    "description": "Note box for philological apparatus, realia, and sources"
   }
 }

@@ -1,6 +1,5 @@
 const extensiblePlugin = require('markdown-it-extensible');
 const vscode = require('vscode');
-const fs = require('fs');
 
 function logDebug(msg) {
     console.debug('markdown-it-extensible:', msg);
@@ -26,13 +25,14 @@ function extendMarkdownIt(md) {
         const res = md.use(extensiblePlugin, {
             blockContainers: blockContainers,
             inlineDirectives: inlineDirectives,
-            configFile: false
+            configFile: false,
+            injectStyles: false
         });
         logDebug('md.use(extensiblePlugin) returned successfully');
         return res;
     } catch (e) {
         logDebug('Error in extendMarkdownIt: ' + (e.stack || e));
-        return md.use(extensiblePlugin, { configFile: false });
+        return md.use(extensiblePlugin, { configFile: false, injectStyles: false });
     }
 }
 
@@ -47,41 +47,76 @@ function activate(context) {
                 const inlineDirectives = config.get('inlineDirectives') || [];
 
                 const items = [];
+                const seenShortcuts = new Set();
 
-                // 1. Dynamische Block-Container Snippets (z. B. ::: warning-box oder swarning-box)
+                // Ermittle getippte Doppelpunkte vor dem Cursor, um Verdopplung zu verhindern
+                const linePrefix = document.lineAt(position).text.substr(0, position.character);
+                const colonMatch = linePrefix.match(/:+$/);
+                const colonCount = colonMatch ? colonMatch[0].length : 0;
+                const colonRange = colonCount > 0
+                    ? new vscode.Range(position.translate(0, -colonCount), position)
+                    : undefined;
+
+                // 1. Dynamische Block-Container Snippets (z. B. ::: warning-box oder swarningbox)
                 blockContainers.forEach(containerOpt => {
-                    const name = containerOpt.name;
+                    if (!containerOpt || typeof containerOpt.name !== 'string' || !containerOpt.name.trim()) {
+                        return;
+                    }
+                    const name = containerOpt.name.trim();
 
                     // Standard-Triggermatch: ::: <name>
                     const item = new vscode.CompletionItem(`::: ${name}`, vscode.CompletionItemKind.Snippet);
                     item.detail = `Extensible Block Container (::: ${name})`;
                     item.insertText = new vscode.SnippetString(`::: ${name} [\${1:Title}]\n\${0:\$TM_SELECTED_TEXT}\n:::`);
                     item.documentation = new vscode.MarkdownString(`Fügt den Block-Container \`::: ${name}\` ein.`);
+                    if (colonRange) {
+                        item.range = colonRange;
+                    }
                     items.push(item);
 
-                    // Kurztipp-Triggermatch: s<name> (z. B. swarning-box)
-                    const shortcut = new vscode.CompletionItem(`s${name.replace(/[^a-zA-Z0-9]/g, '')}`, vscode.CompletionItemKind.Snippet);
-                    shortcut.detail = `Shortcut für ::: ${name}`;
-                    shortcut.insertText = new vscode.SnippetString(`::: ${name} [\${1:Title}]\n\${0:\$TM_SELECTED_TEXT}\n:::`);
-                    shortcut.documentation = new vscode.MarkdownString(`Fügt den Block-Container \`::: ${name}\` ein.`);
-                    items.push(shortcut);
+                    // Kurztipp-Triggermatch: s<name> (z. B. swarningbox) - dedupliziert
+                    const cleanName = name.replace(/[^a-zA-Z0-9]/g, '');
+                    if (cleanName) {
+                        const shortcutKey = `s${cleanName}`;
+                        if (!seenShortcuts.has(shortcutKey)) {
+                            seenShortcuts.add(shortcutKey);
+                            const shortcut = new vscode.CompletionItem(shortcutKey, vscode.CompletionItemKind.Snippet);
+                            shortcut.detail = `Shortcut für ::: ${name}`;
+                            shortcut.insertText = new vscode.SnippetString(`::: ${name} [\${1:Title}]\n\${0:\$TM_SELECTED_TEXT}\n:::`);
+                            shortcut.documentation = new vscode.MarkdownString(`Fügt den Block-Container \`::: ${name}\` ein.`);
+                            items.push(shortcut);
+                        }
+                    }
                 });
 
                 // 2. Dynamische Inline-Direktive Snippets (z. B. :mark oder smark)
                 inlineDirectives.forEach(dir => {
-                    const name = dir.name;
+                    if (!dir || typeof dir.name !== 'string' || !dir.name.trim()) {
+                        return;
+                    }
+                    const name = dir.name.trim();
 
                     const item = new vscode.CompletionItem(`:${name}`, vscode.CompletionItemKind.Snippet);
                     item.detail = `Extensible Inline Directive (:${name}[...])`;
                     item.insertText = new vscode.SnippetString(`:${name}[\${1:text}]`);
                     item.documentation = new vscode.MarkdownString(`Fügt die Inline-Direktive \`:${name}[text]\` ein.`);
+                    if (colonRange) {
+                        item.range = colonRange;
+                    }
                     items.push(item);
 
-                    const shortcut = new vscode.CompletionItem(`s${name.replace(/[^a-zA-Z0-9]/g, '')}`, vscode.CompletionItemKind.Snippet);
-                    shortcut.detail = `Shortcut für :${name}[...]`;
-                    shortcut.insertText = new vscode.SnippetString(`:${name}[\${1:text}]`);
-                    shortcut.documentation = new vscode.MarkdownString(`Fügt die Inline-Direktive \`:${name}[text]\` ein.`);
-                    items.push(shortcut);
+                    const cleanName = name.replace(/[^a-zA-Z0-9]/g, '');
+                    if (cleanName) {
+                        const shortcutKey = `s${cleanName}`;
+                        if (!seenShortcuts.has(shortcutKey)) {
+                            seenShortcuts.add(shortcutKey);
+                            const shortcut = new vscode.CompletionItem(shortcutKey, vscode.CompletionItemKind.Snippet);
+                            shortcut.detail = `Shortcut für :${name}[...]`;
+                            shortcut.insertText = new vscode.SnippetString(`:${name}[\${1:text}]`);
+                            shortcut.documentation = new vscode.MarkdownString(`Fügt die Inline-Direktive \`:${name}[text]\` ein.`);
+                            items.push(shortcut);
+                        }
+                    }
                 });
 
                 return items;

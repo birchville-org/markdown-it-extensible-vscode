@@ -231,7 +231,7 @@ var require_nesting = __commonJS({
 // node_modules/markdown-it-extensible/index.js
 var require_markdown_it_extensible = __commonJS({
   "node_modules/markdown-it-extensible/index.js"(exports2, module2) {
-    var fs2 = require("fs");
+    var fs = require("fs");
     var path = require("path");
     var container = require_markdown_it_container();
     var { adjustContainerNesting } = require_nesting();
@@ -239,7 +239,7 @@ var require_markdown_it_extensible = __commonJS({
     function getCachedCss(warnIfMissing = false) {
       if (cachedCss !== null) return cachedCss;
       try {
-        cachedCss = fs2.readFileSync(path.join(__dirname, "theme/payer-theme.css"), "utf8");
+        cachedCss = fs.readFileSync(path.join(__dirname, "theme/payer-theme.css"), "utf8");
       } catch (e) {
         cachedCss = "";
         if (warnIfMissing) {
@@ -274,28 +274,32 @@ var require_markdown_it_extensible = __commonJS({
       return cls.replace(/[^a-zA-Z0-9_\-\s]/g, "").trim();
     }
     var DEFAULT_BLOCK_CONTAINERS = [
+      // ── Konsolidiertes Kern-Set (Payer v2 Standard) ──
       { name: "grammar-box", className: "grammar-box" },
       { name: "grammarbox", className: "grammar-box" },
-      { name: "grammar-box2", className: "grammar-box2" },
-      { name: "grammarbox2", className: "grammar-box2" },
-      { name: "media", className: "media" },
-      { name: "center", className: "center" },
-      { name: "metrik-schema", className: "metrik-schema" },
-      { name: "metrikschema", className: "metrik-schema" },
-      { name: "important", className: "important" },
-      { name: "deleteme-box", className: "deleteme-box" },
-      { name: "deletemebox", className: "deleteme-box" },
-      { name: "literatur-box", className: "literatur-box" },
-      { name: "literatur", className: "literatur-box" },
+      { name: "warning-box", className: "warning-box" },
+      { name: "warningbox", className: "warning-box" },
+      { name: "verse-box", className: "verse-box" },
+      { name: "versebox", className: "verse-box" },
       { name: "note-box", className: "note-box" },
       { name: "notebox", className: "note-box" },
-      { name: "laut-table", className: "laut-table" },
-      { name: "lauttable", className: "laut-table" },
       { name: "indent", className: "indent" },
-      { name: "compact", className: "compact" },
+      { name: "media", className: "media" },
       { name: "no-header", className: "no-header" },
       { name: "noheader", className: "no-header" },
-      { name: "gaga-box", className: "gaga-box" }
+      // ── Graceful Aliasing für Alt-Container (Abwärtskompatibilität) ──
+      { name: "important", className: "warning-box" },
+      { name: "literatur-box", className: "note-box" },
+      { name: "literatur", className: "note-box" },
+      { name: "compact", className: "verse-box" },
+      // ── Strukturelle & Redaktionelle Legacy-Container ──
+      { name: "metrik-schema", className: "metrik-schema" },
+      { name: "metrikschema", className: "metrik-schema" },
+      { name: "center", className: "center" },
+      { name: "laut-table", className: "laut-table" },
+      { name: "lauttable", className: "laut-table" },
+      { name: "deleteme-box", className: "deleteme-box" },
+      { name: "deletemebox", className: "deleteme-box" }
     ];
     var DEFAULT_INLINE_DIRECTIVES = [
       { name: "sig", className: "signalrot", tag: "strong" },
@@ -306,8 +310,8 @@ var require_markdown_it_extensible = __commonJS({
       if (options.configFile !== false) {
         try {
           const configPath = typeof options.configFile === "string" ? path.resolve(options.configFile) : path.resolve(process.cwd(), "markdown-it-extensible.json");
-          if (fs2.existsSync(configPath)) {
-            configFromFile = JSON.parse(fs2.readFileSync(configPath, "utf8"));
+          if (fs.existsSync(configPath)) {
+            configFromFile = JSON.parse(fs.readFileSync(configPath, "utf8"));
           }
         } catch (e) {
           console.warn("markdown-it-extensible: Invalid config file (markdown-it-extensible.json)", e.message);
@@ -553,7 +557,6 @@ ${titleHtml}`;
 // src/index.js
 var extensiblePlugin = require_markdown_it_extensible();
 var vscode = require("vscode");
-var fs = require("fs");
 function logDebug(msg) {
   console.debug("markdown-it-extensible:", msg);
 }
@@ -574,13 +577,14 @@ function extendMarkdownIt(md) {
     const res = md.use(extensiblePlugin, {
       blockContainers,
       inlineDirectives,
-      configFile: false
+      configFile: false,
+      injectStyles: false
     });
     logDebug("md.use(extensiblePlugin) returned successfully");
     return res;
   } catch (e) {
     logDebug("Error in extendMarkdownIt: " + (e.stack || e));
-    return md.use(extensiblePlugin, { configFile: false });
+    return md.use(extensiblePlugin, { configFile: false, injectStyles: false });
   }
 }
 function activate(context) {
@@ -592,35 +596,66 @@ function activate(context) {
         const blockContainers = config.get("blockContainers") || [];
         const inlineDirectives = config.get("inlineDirectives") || [];
         const items = [];
+        const seenShortcuts = /* @__PURE__ */ new Set();
+        const linePrefix = document.lineAt(position).text.substr(0, position.character);
+        const colonMatch = linePrefix.match(/:+$/);
+        const colonCount = colonMatch ? colonMatch[0].length : 0;
+        const colonRange = colonCount > 0 ? new vscode.Range(position.translate(0, -colonCount), position) : void 0;
         blockContainers.forEach((containerOpt) => {
-          const name = containerOpt.name;
+          if (!containerOpt || typeof containerOpt.name !== "string" || !containerOpt.name.trim()) {
+            return;
+          }
+          const name = containerOpt.name.trim();
           const item = new vscode.CompletionItem(`::: ${name}`, vscode.CompletionItemKind.Snippet);
           item.detail = `Extensible Block Container (::: ${name})`;
           item.insertText = new vscode.SnippetString(`::: ${name} [\${1:Title}]
 \${0:$TM_SELECTED_TEXT}
 :::`);
           item.documentation = new vscode.MarkdownString(`F\xFCgt den Block-Container \`::: ${name}\` ein.`);
+          if (colonRange) {
+            item.range = colonRange;
+          }
           items.push(item);
-          const shortcut = new vscode.CompletionItem(`s${name.replace(/[^a-zA-Z0-9]/g, "")}`, vscode.CompletionItemKind.Snippet);
-          shortcut.detail = `Shortcut f\xFCr ::: ${name}`;
-          shortcut.insertText = new vscode.SnippetString(`::: ${name} [\${1:Title}]
+          const cleanName = name.replace(/[^a-zA-Z0-9]/g, "");
+          if (cleanName) {
+            const shortcutKey = `s${cleanName}`;
+            if (!seenShortcuts.has(shortcutKey)) {
+              seenShortcuts.add(shortcutKey);
+              const shortcut = new vscode.CompletionItem(shortcutKey, vscode.CompletionItemKind.Snippet);
+              shortcut.detail = `Shortcut f\xFCr ::: ${name}`;
+              shortcut.insertText = new vscode.SnippetString(`::: ${name} [\${1:Title}]
 \${0:$TM_SELECTED_TEXT}
 :::`);
-          shortcut.documentation = new vscode.MarkdownString(`F\xFCgt den Block-Container \`::: ${name}\` ein.`);
-          items.push(shortcut);
+              shortcut.documentation = new vscode.MarkdownString(`F\xFCgt den Block-Container \`::: ${name}\` ein.`);
+              items.push(shortcut);
+            }
+          }
         });
         inlineDirectives.forEach((dir) => {
-          const name = dir.name;
+          if (!dir || typeof dir.name !== "string" || !dir.name.trim()) {
+            return;
+          }
+          const name = dir.name.trim();
           const item = new vscode.CompletionItem(`:${name}`, vscode.CompletionItemKind.Snippet);
           item.detail = `Extensible Inline Directive (:${name}[...])`;
           item.insertText = new vscode.SnippetString(`:${name}[\${1:text}]`);
           item.documentation = new vscode.MarkdownString(`F\xFCgt die Inline-Direktive \`:${name}[text]\` ein.`);
+          if (colonRange) {
+            item.range = colonRange;
+          }
           items.push(item);
-          const shortcut = new vscode.CompletionItem(`s${name.replace(/[^a-zA-Z0-9]/g, "")}`, vscode.CompletionItemKind.Snippet);
-          shortcut.detail = `Shortcut f\xFCr :${name}[...]`;
-          shortcut.insertText = new vscode.SnippetString(`:${name}[\${1:text}]`);
-          shortcut.documentation = new vscode.MarkdownString(`F\xFCgt die Inline-Direktive \`:${name}[text]\` ein.`);
-          items.push(shortcut);
+          const cleanName = name.replace(/[^a-zA-Z0-9]/g, "");
+          if (cleanName) {
+            const shortcutKey = `s${cleanName}`;
+            if (!seenShortcuts.has(shortcutKey)) {
+              seenShortcuts.add(shortcutKey);
+              const shortcut = new vscode.CompletionItem(shortcutKey, vscode.CompletionItemKind.Snippet);
+              shortcut.detail = `Shortcut f\xFCr :${name}[...]`;
+              shortcut.insertText = new vscode.SnippetString(`:${name}[\${1:text}]`);
+              shortcut.documentation = new vscode.MarkdownString(`F\xFCgt die Inline-Direktive \`:${name}[text]\` ein.`);
+              items.push(shortcut);
+            }
+          }
         });
         return items;
       }

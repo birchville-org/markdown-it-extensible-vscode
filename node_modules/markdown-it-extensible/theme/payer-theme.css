@@ -280,6 +280,34 @@ html[dir="rtl"] :where(.vp-doc, body) em {
   color: #fef08a !important;
 }
 
+/* Custom Block: Warning-Box (Birchville Scholarly Terracotta) */
+.custom-block.warning-box,
+:where(.vp-doc, body) .custom-block.warning-box {
+  background-color: #fff7ed !important; /* Warm peach */
+  border: none !important;
+  border-left: 5px solid #ea580c !important; /* Scholarly Terracotta */
+  margin: 1.5rem 0;
+  padding: 1.25rem;
+  border-radius: 0 8px 8px 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  font-size: 1.1rem !important;
+  color: #1e293b !important;
+}
+
+.dark .custom-block.warning-box,
+.dark :where(.vp-doc, body) .custom-block.warning-box,
+.vscode-dark .custom-block.warning-box {
+  background-color: #361e04 !important;
+  border-left-color: #ea580c !important;
+  color: #ffedd5 !important;
+}
+
+.custom-block.warning-box .custom-block-title,
+:where(.vp-doc, body) .custom-block.warning-box .custom-block-title {
+  display: none !important;
+}
+
+
 /* Custom Block: Grammar-Box 2 (Orange background, bold styling) */
 .custom-block.grammar-box2,
 :where(.vp-doc, body) .custom-block.grammar-box2 {
@@ -483,6 +511,34 @@ html[dir="rtl"] :where(.vp-doc, body) em {
   font-size: 0.95rem !important;
   color: var(--vp-c-text-2) !important;
   font-style: normal !important;
+}
+
+/* Verse Box (for Ślokas, Mantras, Prayers, Reading Texts, Metrik) */
+:where(.vp-doc, body) .verse-box,
+:where(.vp-doc, body) .custom-block.verse-box,
+.verse-box,
+.custom-block.verse-box {
+  width: 100% !important;
+  text-align: center !important;
+  margin: 2rem 0 !important;
+  display: block !important;
+}
+
+:where(.vp-doc, body) .verse-box p,
+:where(.vp-doc, body) .custom-block.verse-box p,
+.verse-box p,
+.custom-block.verse-box p {
+  text-align: center !important;
+  white-space: pre-line !important;
+  display: block !important;
+  width: 100% !important;
+  margin: 0 auto 1.25rem auto !important;
+  line-height: 1.55 !important;
+}
+
+.custom-block.verse-box .custom-block-title,
+:where(.vp-doc, body) .custom-block.verse-box .custom-block-title {
+  display: none !important;
 }
 
 /* Center Container (for Prayers, etc.) */
@@ -1172,13 +1228,3 @@ select.control-btn,
   font-size: 1.1em;
 }
 
-/* Gaga Box */
-.custom-block.gaga-box,
-:where(.vp-doc, body) .custom-block.gaga-box {
-  background-color: red !important;
-  color: yellow !important;
-  margin: 1.5rem 0;
-  padding: 1.25rem 1.25rem 1.25rem 2.5rem !important;
-  border-radius: 0 8px 8px 0;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-}

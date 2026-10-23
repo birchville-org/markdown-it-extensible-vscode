@@ -2,7 +2,7 @@
   "name": "markdown-it-extensible-vscode",
   "displayName": "Markdown-it Extensible Extension",
   "description": "Configure and render custom markdown container syntax dynamically",
-  "version": "1.3.2",
+  "version": "1.4.0",
   "publisher": "birchville-org",
   "repository": {
     "type": "git",
@@ -67,48 +67,20 @@
               "className": "grammar-box"
             },
             {
-              "name": "grammar-box2",
-              "className": "grammar-box2"
+              "name": "warning-box",
+              "className": "warning-box"
             },
             {
-              "name": "grammarbox2",
-              "className": "grammar-box2"
+              "name": "warningbox",
+              "className": "warning-box"
             },
             {
-              "name": "media",
-              "className": "media"
+              "name": "verse-box",
+              "className": "verse-box"
             },
             {
-              "name": "center",
-              "className": "center"
-            },
-            {
-              "name": "metrik-schema",
-              "className": "metrik-schema"
-            },
-            {
-              "name": "metrikschema",
-              "className": "metrik-schema"
-            },
-            {
-              "name": "important",
-              "className": "important"
-            },
-            {
-              "name": "deleteme-box",
-              "className": "deleteme-box"
-            },
-            {
-              "name": "deletemebox",
-              "className": "deleteme-box"
-            },
-            {
-              "name": "literatur-box",
-              "className": "literatur-box"
-            },
-            {
-              "name": "literatur",
-              "className": "literatur-box"
+              "name": "versebox",
+              "className": "verse-box"
             },
             {
               "name": "note-box",
@@ -119,20 +91,12 @@
               "className": "note-box"
             },
             {
-              "name": "laut-table",
-              "className": "laut-table"
-            },
-            {
-              "name": "lauttable",
-              "className": "laut-table"
-            },
-            {
               "name": "indent",
               "className": "indent"
             },
             {
-              "name": "compact",
-              "className": "compact"
+              "name": "media",
+              "className": "media"
             },
             {
               "name": "no-header",
@@ -143,8 +107,48 @@
               "className": "no-header"
             },
             {
-              "name": "gaga-box",
-              "className": "gaga-box"
+              "name": "important",
+              "className": "warning-box"
+            },
+            {
+              "name": "literatur-box",
+              "className": "note-box"
+            },
+            {
+              "name": "literatur",
+              "className": "note-box"
+            },
+            {
+              "name": "compact",
+              "className": "verse-box"
+            },
+            {
+              "name": "metrik-schema",
+              "className": "metrik-schema"
+            },
+            {
+              "name": "metrikschema",
+              "className": "metrik-schema"
+            },
+            {
+              "name": "center",
+              "className": "center"
+            },
+            {
+              "name": "laut-table",
+              "className": "laut-table"
+            },
+            {
+              "name": "lauttable",
+              "className": "laut-table"
+            },
+            {
+              "name": "deleteme-box",
+              "className": "deleteme-box"
+            },
+            {
+              "name": "deletemebox",
+              "className": "deleteme-box"
             }
           ]
         },
@@ -208,7 +212,7 @@
   },
   "devDependencies": {
     "esbuild": "^0.28.1",
-    "markdown-it-extensible": "^1.3.2"
+    "markdown-it-extensible": "^1.4.0"
   },
   "scripts": {
     "vscode:prepublish": "npm run build",

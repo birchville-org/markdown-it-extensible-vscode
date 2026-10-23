@@ -106,6 +106,12 @@ export interface ScholarlyPluginOptions {
    * ```
    */
   inlineDirectives?: InlineDirectiveOption[];
+
+  /**
+   * Path to custom configuration file, or `false` to disable loading markdown-it-extensible.json.
+   * @default true
+   */
+  configFile?: boolean | string;
 }
 
 /**
