@@ -1,7 +1,7 @@
 {
-  "reviewed_commit": "56f0d77eb09359c45cd7e1b9f16ce11557c9bc0d",
-  "diff_hash": "767cba49c0eb1f3100e5e58e79fbd8298e653bf810524e89e9c7d409ab595212",
-  "timestamp": "2026-10-23T08:37:00Z",
-  "status": "APPROVED",
-  "findings_count": 0
+  "reviewed_commit": "d2536ec19e80579df3dadf4c5744306693eedf8f",
+  "diff_hash": "",
+  "timestamp": "2026-10-23T08:53:40Z",
+  "status": "RELEASED",
+  "version": "v1.4.0"
 }
