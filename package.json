@@ -220,5 +220,6 @@
     "watch": "esbuild src/index.js --bundle --outfile=dist/index.js --external:vscode --format=cjs --platform=node --watch"
   },
   "icon": "icon.png",
+  "license": "MIT",
   "homepage": "https://birchville-org.github.io/markdown-it-extensible/"
 }
